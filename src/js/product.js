@@ -4,7 +4,6 @@ import ProductData from "./ProductData.mjs";
 const dataSource = new ProductData("tents");
 
 function addProductToCart(product) {
-
   // First, We need to obtain the last element saved in the variable in Local Storage called "so-cart"
   const lastItems = getLocalStorage("so-cart") || [];
 
