@@ -18,13 +18,15 @@ function addProductToCart(product) {
   // To save updated cart back to local storage
   setLocalStorage("so-cart", cartItems);
 }
-// add to cart button event handler
+
+
+// handler for add to cart button
 async function addToCartHandler(e) {
   const product = await dataSource.findProductById(e.target.dataset.id);
   addProductToCart(product);
 }
 
-// add listener to Add to Cart button
+// attach event listener to add to cart button
 document
   .getElementById("addToCart")
   .addEventListener("click", addToCartHandler);
