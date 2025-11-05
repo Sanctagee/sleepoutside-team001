@@ -4,8 +4,15 @@ import ProductData from "./ProductData.mjs";
 const dataSource = new ProductData("tents");
 
 function addProductToCart(product) {
-  const cartItems = getLocalStorage("so-cart") || []; // get cart array of items from local storage if null set to empty array
+  let cartItems = getLocalStorage("so-cart");
+  
+  // If null or not an array, reset to empty array
+  if (!Array.isArray(cartItems)) {
+    cartItems = [];
+  }
+  
   cartItems.push(product);
+  
   setLocalStorage("so-cart", cartItems);
 }
 // add to cart button event handler
