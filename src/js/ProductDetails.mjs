@@ -6,47 +6,75 @@ export default class ProductDetails {
         this.product = {};
         this.dataSource = dataSource;
     }
-    async init() {
-      // fetch the product details from the data source
-        this.product = await this.dataSource.findProductById(this.productId);
-        this.renderProductDetails();
-        // attach event listener to add to cart button
-        document
-            .getElementById('addToCart')
-            .addEventListener('click', this.addProductToCart.bind(this));
-    }
-      // To create the function that will add products to cart:
-    addProductToCart(product) {
-        // Always get cart items or initialize as empty array
-        let cartItems = getLocalStorage("so-cart");
 
-        // In a condition when it's not an array, start fresh with empty array
-        if (!Array.isArray(cartItems)) {
-            cartItems = [];
+    async init() {
+        // 1. Obtener los detalles del producto
+        this.product = await this.dataSource.findProductById(this.productId);
+
+        // Si no se encuentra el producto, mostrar mensaje de error
+        if (!this.product) {
+            const container = document.getElementById("product-details");
+            if (container) {
+                container.innerHTML = `<p style="color:red;">Producto no encontrado. Verifica el enlace o el ID.</p>`;
+            }
+            return;
         }
 
-        // To add new product to cart which is now an array
-        cartItems.push(product);
-        // To save updated cart back to local storage
-        setLocalStorage("so-cart", cartItems);
+        // 2. Renderizar los detalles en el HTML
+        this.renderProductDetails();
+
+        // 3. Agregar el event listener al botón "Add to Cart" (después de renderizar)
+        const addBtn = document.getElementById("addToCart");
+        if (addBtn) {
+            addBtn.addEventListener("click", this.addProductToCart.bind(this));
+        }
+    }
+
+    addProductToCart() {
+        let cart = getLocalStorage("so-cart") || [];
+        if (!this.product || !this.product.Id) {
+            alert("No se pudo agregar el producto. Intenta recargar la página.");
+            return;
+        }
+        cart.push(this.product);
+        setLocalStorage("so-cart", cart);
+        alert("¡Producto agregado al carrito!");
     }
 
     renderProductDetails() {
-        productDetailsTemplate(this.product);
+        const container = document.getElementById("product-details");
+        if (!container) return;
+
+        const colores = (this.product.Colors || [])
+            .map((c) => c.ColorName)
+            .join(", ");
+
+        container.innerHTML = `
+      <section class="product-detail">
+        <h3>${this.product.Brand?.Name || ""}</h3>
+
+        <h2 class="divider">${this.product.Name || ""}</h2>
+
+        <img
+          class="divider"
+          src="${this.product.Image || ""}"
+          alt="${this.product.Name || ""}"
+        />
+
+        <p class="product-card__price">$${this.product.FinalPrice || ""}</p>
+
+        <p class="product__color">${colores}</p>
+
+        <p class="product__description">
+          ${this.product.DescriptionHtmlSimple || ""}
+        </p>
+
+        <div class="product-detail__add">
+          <button id="addToCart" data-id="${this.product.Id || ""}">
+            Add to Cart
+          </button>
+        </div>
+      </section>
+    `;
     }
-}
-
-function productDetailsTemplate(product) {
-    document.querySelector('h2').textContent = product.Brand.Name;
-    document.querySelector('h3').textContent = product.NameWithoutBrand;
-
-    const productImage = document.getElementById('productImage');
-    productImage.src = product.Image;
-    productImage.alt = product.NameWithoutBrand;
-
-    document.getElementById('productPrice').textContent = product.FinalPrice;
-    document.getElementById('productColor').textContent = product.Colors[0].ColorName;
-    document.getElementById('productDesc').innerHTML = product.DescriptionHtmlSimple;
-
-    document.getElementById('addToCart').dataset.id = product.Id;
 }

@@ -6,8 +6,9 @@
   "scripts": {
     "start": "vite",
     "build": "vite build --emptyOutDir",
-    "lint": "eslint *.js src/**/*.js",
-    "format": "prettier --ignore-path ./.gitignore --write \"./**/*.{html,json,js,ts,css}\"",
+    "preview": "vite preview",
+    "lint": "eslint './**/*.js'",
+    "format": "prettier --ignore-path ./.gitignore --write './**/*.{html,js,ts,css,json}'",
     "test": "jest"
   },
   "author": "Shane Thompson",
@@ -18,7 +19,9 @@
     "eslint-plugin-import": "^2.29.1",
     "jest": "^29.7.0",
     "prettier": "^3.2.5",
-    "vite": "^7.1.12"
+    "vite": "^5.4.7",
+    "@babel/core": "^7.23.0",
+    "@babel/preset-env": "^7.23.0"
   },
   "babel": {
     "presets": [
