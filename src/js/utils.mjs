@@ -31,8 +31,16 @@ export function getParam(param) {
   const urlParams = new URLSearchParams(queryString);
 
   // retrieves that value of the named parameter, in this case param
-  const productCategory = urlParams.get(param);
-  // return that value, in this case, the product category
-  return productCategory;
+  const product = urlParams.get(param);
+  // return that value, in this case, the product
+  return product;
 }
 
+export function renderListWithTemplate(template, parentElement, list, position = "afterbegin", clear = false) {
+  const htmlStrings = list.map(template);
+  // if clear is true, we need to clear out the contents of the perent
+  if (clear) {
+    parentElement.innerHTML = "";
+  }
+  parentElement.insertAdjacentHTML(position, htmlStrings.join(""));
+}
