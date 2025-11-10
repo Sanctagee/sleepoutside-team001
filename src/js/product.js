@@ -5,10 +5,30 @@ import ProductDetails from "./ProductDetails.mjs";
 
 const dataSource = new ProductData("tents");
 
-// Test the getParam function in product.js to see if the productId displays in the URL when a product is clicked.
-const productId = getParam("product");
+// To create the function that will add products to cart:
+function addProductToCart(product) {
+  // Always get cart items or initialize as empty array
+  let cartItems = getLocalStorage("so-cart");
+  
+  // In a condition when it's not an array, start fresh with empty array
+  if (!Array.isArray(cartItems)) {
+    cartItems = [];
+  }
+  
+  // To add new product to cart which is now an array
+  cartItems.push(product);
+  // To save updated cart back to local storage
+  setLocalStorage("so-cart", cartItems);
+}
 
-const product = new ProductDetails(productId, dataSource);
-product.init();
 
+// handler for add to cart button
+async function addToCartHandler(e) {
+  const product = await dataSource.findProductById(e.target.dataset.id);
+  addProductToCart(product);
+}
 
+// attach event listener to add to cart button
+document
+  .getElementById("addToCart")
+  .addEventListener("click", addToCartHandler);
