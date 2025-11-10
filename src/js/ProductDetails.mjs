@@ -1,5 +1,5 @@
 // import functions from modules
-import { getLocalStorage, setLocalStorage, qs } from "./utils.mjs";
+import { getLocalStorage, setLocalStorage, qs, cartCount } from "./utils.mjs";
 
 // create the product details class
 export default class ProductDetails {
@@ -17,11 +17,13 @@ export default class ProductDetails {
 
     // render the product details 
     this.renderProductDetails();
+    const addBtn = document.getElementById("addToCart");
+    if (addBtn) {
+      addBtn.addEventListener("click", () => this.addProductToCart(this.product));
+    }
 
-    // add event listener to the AddToCart button
-    document
-    .getElementById("addToCart")
-    .addEventListener("click", this.addProductToCart.bind(this));
+    // ensure the cart count is initialized on the product page
+    cartCount();
   }
 
 
@@ -34,18 +36,31 @@ addProductToCart() {
   if (!Array.isArray(cartItems)) {
     cartItems = [];
   }
+
+  // find if the item already exists in the cart
+  const existingItem = cartItems.find((item) => item.Id === this.product.Id);
+
+  if(existingItem) {
+    // if it exists, just increment its quantity
+    existingItem.quantity += 1;
+  } else {
+    // if it's a new item, add it to the cart with quantity of 1
+    const newItem = { ...this.product, quantity: 1};
+    cartItems.push(newItem);
+  }
   
-  // To add new product to cart which is now an array
-  cartItems.push(product);
-  // To save updated cart back to local storage
+  // save updated cart back to local storage
   setLocalStorage("so-cart", cartItems);
+
+  // update the cart count badge
+  cartCount();
 }
 
+// render the products details template
 renderProductDetails() {
     productDetailsTemplate(this.product);
 }
 }
-
 
 // create dynamic template using index.html from product_pages
 function productDetailsTemplate(product) {
