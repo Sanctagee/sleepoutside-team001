@@ -13,5 +13,5 @@ const element = qs(".product-list");
 
 const productList = new ProductList("Tents", dataSource, element);
 
-// initialize product list and then set the cart count badge in the header
+// initialize product list and then set the cart count badge
 productList.init().then(() => cartCount());
