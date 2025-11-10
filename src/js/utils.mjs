@@ -44,3 +44,29 @@ export function renderListWithTemplate(template, parentElement, list, position =
   }
   parentElement.insertAdjacentHTML(position, htmlStrings.join(""));
 }
+
+// Add a superscript number of items in the cart to the backpack icon
+// Create a function to handle counting of items 
+export function cartCount() {
+  const cartItems = getLocalStorage("so-cart") || [];
+
+  // Sum the quantity of all items in the cart
+  // guard for items that might not have a quantity property (treat as 1)
+  const count = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+
+  // Get the DOM element for output
+  const countElement = qs(".count-items");
+
+  // If there are items in the cart, show the count; if not, hide the circle
+  if(countElement) {
+    if(count > 0) {
+      // Ensures that the badge is shown when count > 0
+      countElement.style.display = "flex";
+      // Assign count to the countElement
+      countElement.textContent = count;
+    } else {
+      // Hide badge when count = 0
+      countElement.style.display = "none";
+    }
+  }
+}

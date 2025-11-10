@@ -3,7 +3,7 @@ import ProductData from "./ProductData.mjs";
 
 import ProductList from "./ProductList.mjs";
 
-import { qs } from "./utils.mjs";
+import { qs, cartCount } from "./utils.mjs";
 
 // create an instance of ProductData
 const dataSource = new ProductData("tents");
@@ -13,4 +13,5 @@ const element = qs(".product-list");
 
 const productList = new ProductList("Tents", dataSource, element);
 
-productList.init();
+// initialize product list and then set the cart count badge
+productList.init().then(() => cartCount());
