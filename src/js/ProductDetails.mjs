@@ -27,7 +27,7 @@ export default class ProductDetails {
   }
 
 
-// To create the function that will add products to cart:
+// Refactor AddproductToCart function to update cartCount
 addProductToCart() {
   // Always get cart items or initialize as empty array
   let cartItems = getLocalStorage("so-cart");

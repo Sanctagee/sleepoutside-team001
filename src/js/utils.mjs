@@ -46,7 +46,7 @@ export function renderListWithTemplate(template, parentElement, list, position =
 }
 
 // Add a superscript number of items in the cart to the backpack icon
-// Create a function to handle counting of items 
+// Create a function to handle counting of items. 
 export function cartCount() {
   const cartItems = getLocalStorage("so-cart") || [];
 
