@@ -49,4 +49,5 @@ cd sleepoutside-team001
 npm install
 
 # Start development server
+
 npm run start
