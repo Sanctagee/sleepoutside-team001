@@ -241,6 +241,23 @@ button {
   grid-column: 3;
 }
 
+/* add styling of cart count badge in the header */
+.count-items {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  height: 20px;
+  width: 20px;
+  margin: -10px 1.5rem 0 -10px;
+  font-size: small;
+  color: #fff;
+  background-color: red;
+  position: relative;
+  bottom: 2.3rem;
+  left: 1.8rem;
+}
+
 @media screen and (min-width: 500px) {
   body {
     max-width: 1080px;
