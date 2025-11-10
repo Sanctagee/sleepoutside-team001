@@ -241,7 +241,7 @@ button {
   grid-column: 3;
 }
 
-/* add styling of cart count badge */
+/* add styling of cart count badge in the header */
 .count-items {
   display: flex;
   align-items: center;
