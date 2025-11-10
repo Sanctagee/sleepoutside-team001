@@ -45,8 +45,13 @@ export function renderListWithTemplate(template, parentElement, list, position =
   parentElement.insertAdjacentHTML(position, htmlStrings.join(""));
 }
 
+<<<<<<< HEAD
 // Add a superscript number of items in the cart to the backpack icon in the header
 // Create a function to handle counting of items. 
+=======
+// Add a superscript number of items in the cart to the backpack icon
+// Create a function to handle counting of items 
+>>>>>>> b85b2cb7ba36387d8298b340307a0b65d1d387bf
 export function cartCount() {
   const cartItems = getLocalStorage("so-cart") || [];
 
