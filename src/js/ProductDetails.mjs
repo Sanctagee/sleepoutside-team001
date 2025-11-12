@@ -1,53 +1,79 @@
-import { setLocalStorage } from './utils.mjs';
+// import functions from modules
+import { getLocalStorage, setLocalStorage, qs, cartCount } from "./utils.mjs";
 
+// create the product details class
 export default class ProductDetails {
+  // keep tract of important product info
   constructor(productId, dataSource) {
     this.productId = productId;
     this.product = {};
     this.dataSource = dataSource;
   }
 
+  // create the init() class
   async init() {
-    // Get product details
+    // get product details using findProductById
     this.product = await this.dataSource.findProductById(this.productId);
-    
-    // Render product details
+
+    // render the product details 
     this.renderProductDetails();
-    
-    // Add event listener to Add to Cart button
-    document.getElementById('addToCart')
-      .addEventListener('click', this.addToCart.bind(this));
-  }
-
-  addToCart() {
-    let cartItems = JSON.parse(localStorage.getItem('so-cart')) || [];
-    
-    if (!Array.isArray(cartItems)) {
-      cartItems = [];
+    const addBtn = document.getElementById("addToCart");
+    if (addBtn) {
+      addBtn.addEventListener("click", () => this.addProductToCart(this.product));
     }
-    
-    cartItems.push(this.product);
-    setLocalStorage('so-cart', cartItems);
-    
-    // Optional: Show confirmation
-    alert('Product added to cart!');
+
+    // ensure the cart count is initialized on the product page
+    cartCount();
   }
 
-  renderProductDetails() {
-    // Create the product details HTML
-    const productHTML = `
-      <div class="product-detail">
-        <img src="${this.product.Image}" alt="${this.product.Name}">
-        <h2 class="card__name">${this.product.Name}</h2>
-        <h3 class="card__brand">${this.product.Brand}</h3>
-        <p class="product-card__price">$${this.product.FinalPrice}</p>
-        <p class="product__color">${this.product.Colors[0].ColorName}</p>
-        <p class="product__description">${this.product.Description}</p>
-        <button id="addToCart" data-id="${this.product.Id}">Add to Cart</button>
-      </div>
-    `;
-    
-    // Insert into the page
-    document.getElementById('product-details-container').innerHTML = productHTML;
+
+// To create the function that will add products to cart:
+addProductToCart() {
+  // Always get cart items or initialize as empty array
+  let cartItems = getLocalStorage("so-cart");
+  
+  // In a condition when it's not an array, start fresh with empty array
+  if (!Array.isArray(cartItems)) {
+    cartItems = [];
   }
+
+  // find if the item already exists in the cart
+  const existingItem = cartItems.find((item) => item.Id === this.product.Id);
+
+  if(existingItem) {
+    // if it exists, just increment its quantity
+    existingItem.quantity += 1;
+  } else {
+    // if it's a new item, add it to the cart with quantity of 1
+    const newItem = { ...this.product, quantity: 1};
+    cartItems.push(newItem);
+  }
+  
+  // save updated cart back to local storage
+  setLocalStorage("so-cart", cartItems);
+
+  // update the cart count badge
+  cartCount();
+}
+
+// render the products details template
+renderProductDetails() {
+    productDetailsTemplate(this.product);
+}
+}
+
+// create dynamic template using index.html from product_pages
+function productDetailsTemplate(product) {
+  qs("h2").textContent = product.Brand.Name;
+  qs("h3").textContent = product.NameWithoutBrand;
+
+  const productImage = qs(".divider");
+  productImage.src = product.Image;
+  productImage.alt = product.NameWithoutBrand;
+
+  qs(".product-card__price").textContent = product.FinalPrice;
+  qs(".product__color").textContent = product.Colors[0].ColorName;
+  qs(".product__description").innerHTML = product.DescriptionHtmlSimple;
+
+  document.getElementById('addToCart').dataset.id = product.Id;
 }
