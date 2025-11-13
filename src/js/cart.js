@@ -1,3 +1,4 @@
+import { getLocalStorage, loadHeaderFooter } from "./utils.mjs";
 import { getLocalStorage, setLocalStorage } from "./utils.mjs";
 
 function renderCartContents() {
@@ -33,6 +34,8 @@ function cartItemTemplate(item, index) {
   return newItem;
 }
 
+renderCartContents();
+// loadHeaderFooter();
 function addRemoveButtonListeners() {
   const removeButtons = document.querySelectorAll('.remove-btn');
   removeButtons.forEach(button => {
