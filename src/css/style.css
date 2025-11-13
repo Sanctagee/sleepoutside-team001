@@ -7,6 +7,9 @@
   --tertiary-color: #8a470c;
   --light-grey: #d0d0d0;
   --dark-grey: #303030;
+  --danger-color: #ff4444;
+  --danger-hover: #780808ff;
+  --border-radius: 8px 0 8px 0;
 
   /* sizes */
   --font-base: 18px;
@@ -55,6 +58,10 @@ p {
   height: 60px;
 }
 
+.cart-card {
+  position: relative;
+}
+
 .logo a {
   text-decoration: none;
   color: var(--font-body);
@@ -99,6 +106,7 @@ p {
   color: var(--tertiary-color);
 }
 
+/* ======= Styles on buttons =========== */
 button {
   padding: 0.5em 2em;
   background-color: var(--secondary-color);
@@ -106,9 +114,31 @@ button {
   margin: auto;
   display: block;
   border: 0;
+  border-radius: var(--border-radius);
   font-size: var(--large-font);
   cursor: pointer;
 }
+
+.remove-btn {
+  background: var(--danger-color);
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.remove-btn:hover {
+  background: var(--danger-hover);
+  transform: translateY(-4px) scale(1.1);
+  transition: all .3s ease-in-out;
+}
+
+.cart-card {
+  position: relative;
+}
+
 
 .divider {
   border-bottom: 2px solid var(--primary-color);
@@ -239,6 +269,23 @@ button {
 .cart-card__price {
   grid-row: 2;
   grid-column: 3;
+}
+
+/* add styling of cart count badge in the header */
+.count-items {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  height: 20px;
+  width: 20px;
+  margin: -10px 1.5rem 0 -10px;
+  font-size: small;
+  color: #fff;
+  background-color: red;
+  position: relative;
+  bottom: 2.3rem;
+  left: 1.8rem;
 }
 
 @media screen and (min-width: 500px) {
