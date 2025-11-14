@@ -288,11 +288,6 @@ button {
   left: 1.8rem;
 }
 
-.product__srp {
-    text-decoration: line-through;
-    color: #777; /* optional: makes it look faded */
-}
-
 @media screen and (min-width: 500px) {
   body {
     max-width: 1080px;

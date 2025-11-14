@@ -67,18 +67,11 @@ function productDetailsTemplate(product) {
   qs("h2").textContent = product.Brand.Name;
   qs("h3").textContent = product.NameWithoutBrand;
 
-  const productImage = qs(".product__image");
+  const productImage = qs(".divider");
   productImage.src = product.Image;
   productImage.alt = product.NameWithoutBrand;
 
-
-  // NEW: Calculate the discount percentage
-  const discountPercentage = Math.round(((product.SuggestedRetailPrice - product.FinalPrice) / product.SuggestedRetailPrice) * 100);
-
-  // Insert discount badge
-  qs(".product__srp").textContent = `$${product.SuggestedRetailPrice}`;
-  qs(".product__discount").textContent = `${discountPercentage}% OFF`;
-  qs(".product-card__price").textContent = `$${product.FinalPrice}`;
+  qs(".product-card__price").textContent = product.FinalPrice;
   qs(".product__color").textContent = product.Colors[0].ColorName;
   qs(".product__description").innerHTML = product.DescriptionHtmlSimple;
 
