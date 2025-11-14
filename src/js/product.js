@@ -7,7 +7,6 @@ const productId = getParam('product');
 const dataSource = new ProductData('tents');
 
 // Test the getParam function in product.js to see if the productId displays in the URL when a product is clicked.
-const productId = getParam("product");
 
 const product = new ProductDetails(productId, dataSource);
 product.init();
