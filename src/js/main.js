@@ -5,6 +5,8 @@ import ProductList from "./ProductList.mjs";
 
 import { qs, cartCount } from "./utils.mjs";
 
+import { loadHeaderFooter } from "./utils.mjs";
+
 // create an instance of ProductData
 const dataSource = new ProductData("tents");
 
@@ -15,3 +17,5 @@ const productList = new ProductList("Tents", dataSource, element);
 
 // initialize product list and then set the cart count badge
 productList.init().then(() => cartCount());
+
+loadHeaderFooter();
