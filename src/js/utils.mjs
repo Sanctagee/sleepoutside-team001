@@ -74,6 +74,7 @@ export async function loadHeaderFooter() {
   cartCount();
 }
 
+
 // Add a superscript number of items in the cart to the backpack icon in the header
 // Create a function to handle counting of items. 
 
