@@ -70,9 +70,9 @@ export async function loadHeaderFooter() {
   renderWithTemplate(headerTemplate, headerElement);
   renderWithTemplate(footerTemplate, footerElement);
 
+  // Update cart count in header
+  cartCount();
 }
-
-
 
 // Add a superscript number of items in the cart to the backpack icon in the header
 // Create a function to handle counting of items. 
