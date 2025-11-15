@@ -1,4 +1,7 @@
 // wrapper for querySelector...returns matching element
+
+// qs("#title");          // equivale a document.querySelector("#title")
+// qs(".card", someDiv);  // busca dentro de someDiv
 export function qs(selector, parent = document) {
   return parent.querySelector(selector);
 }
@@ -20,4 +23,18 @@ export function setClick(selector, callback) {
     callback();
   });
   qs(selector).addEventListener("click", callback);
+}
+
+// Use those lines to create a new function in the
+//  utils.mjs file called getParam(param) that you
+//  can use to return a parameter from the URL
+// when requested.
+
+export function getParam(param) {
+
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const product = urlParams.get(param);
+  return product;
+
 }
