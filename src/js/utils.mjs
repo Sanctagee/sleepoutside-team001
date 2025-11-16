@@ -39,7 +39,7 @@ export function getParam(param) {
 
 export function renderListWithTemplate(template, parentElement, list, position = "afterbegin", clear = false) {
   const htmlStrings = list.map(template);
-  // if clear is true, we need to clear out the contents of the perent
+  // if clear is true, we need to clear out the contents of the parent element
   if (clear) {
     parentElement.innerHTML = "";
   }
