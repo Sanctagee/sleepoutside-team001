@@ -28,12 +28,6 @@ export default class ProductList {
 
     // render list method
     renderList(list) {
-        // use the map method to call the productCardTemplate once
-        //const htmlStrings = list.map(productCardTemplate);
-        // render the list template
-        //this.listElement.insertAdjacentHTML("aferbegin", htmlStrings.join(""));
-
-        // apply this new utility function instead of the commented code above
         renderListWithTemplate(productCardTemplate, this.listElement, list);
     }
 }
