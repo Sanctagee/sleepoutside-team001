@@ -1,8 +1,6 @@
 // read the product data out
 import ProductData from "./ProductData.mjs";
-
 import ProductList from "./ProductList.mjs";
-
 import { qs, cartCount } from "./utils.mjs";
 
 import { loadHeaderFooter } from "./utils.mjs";
