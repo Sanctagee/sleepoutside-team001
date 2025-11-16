@@ -19,32 +19,26 @@ export default class ProductDetails {
     this.renderProductDetails();
     const addBtn = document.getElementById("addToCart");
     if (addBtn) {
-      addBtn.addEventListener("click", () => this.addProductToCart(this.product));
+      addBtn.addEventListener("click", () => this.addToCart());
     }
 
     // ensure the cart count is initialized on the product page
     cartCount();
   }
 
-
-// To create the function that will add products to cart:
-addProductToCart() {
-  // Always get cart items or initialize as empty array
-  let cartItems = getLocalStorage("so-cart");
+// Creating the function that will add item to cart
+addToCart() {
+  let cartItems = getLocalStorage("so-cart") || [];
   
-  // In a condition when it's not an array, start fresh with empty array
   if (!Array.isArray(cartItems)) {
     cartItems = [];
   }
 
-  // find if the item already exists in the cart
   const existingItem = cartItems.find((item) => item.Id === this.product.Id);
 
   if(existingItem) {
-    // if it exists, just increment its quantity
     existingItem.quantity += 1;
   } else {
-    // if it's a new item, add it to the cart with quantity of 1
     const newItem = { ...this.product, quantity: 1};
     cartItems.push(newItem);
   }
@@ -54,7 +48,34 @@ addProductToCart() {
 
   // update the cart count badge
   cartCount();
+
+  // 🎯 MODERN NOTIFICATION (instead of basic alert)
+  this.showCartNotification();
 }
+
+// 🎯 ADD THIS NEW METHOD TO YOUR ProductDetails CLASS
+showCartNotification() {
+  // Remove existing notification if any
+  const existingNotification = document.querySelector('.cart-notification');
+  if (existingNotification) {
+    existingNotification.remove();
+  }
+
+  // Create new notification
+  const notification = document.createElement('div');
+  notification.className = 'cart-notification';
+  notification.innerHTML = `✅ ${this.product.Name} added to cart!`;
+  
+  // Add to page
+  document.body.appendChild(notification);
+  
+  // Auto-remove after 3 seconds
+  setTimeout(() => {
+    notification.remove();
+  }, 3000);
+}
+
+
 
 // render the products details template
 renderProductDetails() {
@@ -62,18 +83,46 @@ renderProductDetails() {
 }
 }
 
-// create dynamic template using index.html from product_pages
+// To create dynamic template using index.html from product_pages
+
 function productDetailsTemplate(product) {
-  qs("h2").textContent = product.Brand.Name;
-  qs("h3").textContent = product.NameWithoutBrand;
+  const h3Element = qs("h3");
+  const h2Element = qs("h2");
+  
+  if (h3Element) h3Element.textContent = product.Brand.Name;
+  if (h2Element) h2Element.textContent = product.NameWithoutBrand;
 
-  const productImage = qs(".divider");
-  productImage.src = product.Image;
-  productImage.alt = product.NameWithoutBrand;
+  const productImage = qs(".product__image");
+  if (productImage) {
+    productImage.src = product.Images.PrimaryLarge;
+    productImage.alt = product.NameWithoutBrand;
+  }
 
-  qs(".product-card__price").textContent = product.FinalPrice;
-  qs(".product__color").textContent = product.Colors[0].ColorName;
-  qs(".product__description").innerHTML = product.DescriptionHtmlSimple;
+  // Calculate discount (API data structure)
+  const discountPercentage = product.SuggestedRetailPrice ? 
+    Math.round(((product.SuggestedRetailPrice - product.FinalPrice) / product.SuggestedRetailPrice) * 100) : 0;
 
-  document.getElementById('addToCart').dataset.id = product.Id;
+  // Update elements
+  const srpElement = qs(".product__srp");
+  const discountElement = qs(".product__discount");
+  const priceElement = qs(".product-card__price");
+  const colorElement = qs(".product__color");
+  const descriptionElement = qs(".product__description");
+  
+  if (srpElement && product.SuggestedRetailPrice) {
+    srpElement.textContent = `$${product.SuggestedRetailPrice}`;
+  }
+  if (discountElement && discountPercentage > 0) {
+    discountElement.textContent = `${discountPercentage}% OFF`;
+  }
+  if (priceElement) priceElement.textContent = `$${product.FinalPrice}`;
+  if (colorElement && product.Colors && product.Colors[0]) {
+    colorElement.textContent = product.Colors[0].ColorName;
+  }
+  if (descriptionElement) descriptionElement.innerHTML = product.DescriptionHtml;
+
+  const addToCartBtn = document.getElementById('addToCart');
+  if (addToCartBtn) {
+    addToCartBtn.dataset.id = product.Id;
+  }
 }

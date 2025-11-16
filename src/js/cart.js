@@ -1,5 +1,6 @@
-import { getLocalStorage, loadHeaderFooter } from "./utils.mjs";
-import { getLocalStorage, setLocalStorage } from "./utils.mjs";
+import { getLocalStorage, setLocalStorage, loadHeaderFooter } from "./utils.mjs";
+
+loadHeaderFooter();
 
 function renderCartContents() {
   const cartItems = getLocalStorage("so-cart") || [];
@@ -18,7 +19,8 @@ function renderCartContents() {
 }
 
 function cartItemTemplate(item, index) {
-  const newItem = `<li class="cart-card divider">
+  // FIX: Use actual quantity instead of hardcoded "1"
+  return `<li class="cart-card divider">
     <a href="#" class="cart-card__image">
       <img src="${item.Image}" alt="${item.Name}" />
     </a>
@@ -26,16 +28,15 @@ function cartItemTemplate(item, index) {
       <h2 class="card__name">${item.Name}</h2>
     </a>
     <p class="cart-card__color">${item.Colors[0].ColorName}</p>
-    <p class="cart-card__quantity">qty: 1</p>
+    <p class="cart-card__quantity">qty: ${item.quantity || 1}</p>
     <p class="cart-card__price">$${item.FinalPrice}</p>
     <button class="remove-btn" data-index="${index}">Remove</button>
   </li>`;
 
-  return newItem;
 }
 
 renderCartContents();
-// loadHeaderFooter();
+
 function addRemoveButtonListeners() {
   const removeButtons = document.querySelectorAll('.remove-btn');
   removeButtons.forEach(button => {
@@ -58,3 +59,4 @@ function removeFromCart(index) {
 
 // Initialize cart when page loads
 document.addEventListener('DOMContentLoaded', renderCartContents);
+

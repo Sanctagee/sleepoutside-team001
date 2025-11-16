@@ -9,6 +9,7 @@
   --dark-grey: #303030;
   --danger-color: #ff4444;
   --danger-hover: #780808ff;
+  --btnHover: #380e39ff;
   --border-radius: 8px 0 8px 0;
 
   /* sizes */
@@ -109,7 +110,7 @@ p {
 /* ======= Styles on buttons =========== */
 button {
   padding: 0.5em 2em;
-  background-color: var(--secondary-color);
+  background-color: var(--tertiary-color);
   color: white;
   margin: auto;
   display: block;
@@ -119,6 +120,11 @@ button {
   cursor: pointer;
 }
 
+button:hover{
+  transform: translateY(-4px) scale(1.1);
+  transition: all .3s ease-in-out;
+  background-color: var(--btnHover);
+}
 .remove-btn {
   background: var(--danger-color);
   color: white;
@@ -138,6 +144,34 @@ button {
 .cart-card {
   position: relative;
 }
+
+
+/* ====== FOr the Notification ====== */
+/* Cart notification styles */
+.cart-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #972448ff;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 5px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 1000;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
 
 
 .divider {
@@ -271,6 +305,47 @@ button {
   grid-column: 3;
 }
 
+/* ==================Styles for the Categories Section ================== */
+
+.categories {
+  padding: 2rem;
+  text-align: center;
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.category-card {
+  display: block;
+  padding: 1.5rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #333;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.category-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.category-card img {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 0.5rem;
+}
+
+.category-card h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
 /* add styling of cart count badge in the header */
 .count-items {
   display: flex;
@@ -286,6 +361,11 @@ button {
   position: relative;
   bottom: 2.3rem;
   left: 1.8rem;
+}
+
+.product__srp {
+    text-decoration: line-through;
+    color: #777; /* optional: makes it look faded */
 }
 
 @media screen and (min-width: 500px) {
