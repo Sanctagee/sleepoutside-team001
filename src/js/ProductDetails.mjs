@@ -19,32 +19,26 @@ export default class ProductDetails {
     this.renderProductDetails();
     const addBtn = document.getElementById("addToCart");
     if (addBtn) {
-      addBtn.addEventListener("click", () => this.addProductToCart(this.product));
+      addBtn.addEventListener("click", () => this.addToCart());
     }
 
     // ensure the cart count is initialized on the product page
     cartCount();
   }
 
-
-// To create the function that will add products to cart:
-addProductToCart() {
-  // Always get cart items or initialize as empty array
-  let cartItems = getLocalStorage("so-cart");
+// Creating the function that will add item to cart
+addToCart() {
+  let cartItems = getLocalStorage("so-cart") || [];
   
-  // In a condition when it's not an array, start fresh with empty array
   if (!Array.isArray(cartItems)) {
     cartItems = [];
   }
 
-  // find if the item already exists in the cart
   const existingItem = cartItems.find((item) => item.Id === this.product.Id);
 
   if(existingItem) {
-    // if it exists, just increment its quantity
     existingItem.quantity += 1;
   } else {
-    // if it's a new item, add it to the cart with quantity of 1
     const newItem = { ...this.product, quantity: 1};
     cartItems.push(newItem);
   }
@@ -54,7 +48,34 @@ addProductToCart() {
 
   // update the cart count badge
   cartCount();
+
+  // 🎯 MODERN NOTIFICATION (instead of basic alert)
+  this.showCartNotification();
 }
+
+// 🎯 ADD THIS NEW METHOD TO YOUR ProductDetails CLASS
+showCartNotification() {
+  // Remove existing notification if any
+  const existingNotification = document.querySelector('.cart-notification');
+  if (existingNotification) {
+    existingNotification.remove();
+  }
+
+  // Create new notification
+  const notification = document.createElement('div');
+  notification.className = 'cart-notification';
+  notification.innerHTML = `✅ ${this.product.Name} added to cart!`;
+  
+  // Add to page
+  document.body.appendChild(notification);
+  
+  // Auto-remove after 3 seconds
+  setTimeout(() => {
+    notification.remove();
+  }, 3000);
+}
+
+
 
 // render the products details template
 renderProductDetails() {
