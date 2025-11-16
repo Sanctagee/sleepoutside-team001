@@ -23,6 +23,7 @@ function cartItemTemplate(item) {
 </li>`;
 
   return newItem;
+  
 }
 
 renderCartContents();
