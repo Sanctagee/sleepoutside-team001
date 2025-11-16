@@ -1,15 +1,16 @@
 import { renderListWithTemplate } from "./utils.mjs";
 
 // create a template function using /index.html markups
+
 function productCardTemplate(product) {
-    return `<li class="product-card">
-    <a href="product_pages/?product=${product.Id}">
-    <img src="${product.Image}" alt="${product.Name}">
-    <h2>${product.Brand.Name}</h2>
-    <h3>${product.Name}</h3>
-    <p class="product-card__price">$${product.FinalPrice}</p>
+  return `<li class="product-card">
+    <a href="product_pages/index.html?product=${product.Id}">
+      <img src="${product.Images.PrimaryMedium}" alt="Image of ${product.Name}">
+      <h2 class="card__brand">${product.Brand.Name}</h2>
+      <h3 class="card__name">${product.Name}</h3>
+      <p class="product-card__price">$${product.FinalPrice}</p>
     </a>
-    </li>`;
+  </li>`;
 }
 
 // create the product list class
@@ -24,16 +25,23 @@ export default class ProductList {
     async init() {
         const list = await this.dataSource.getData();
         this.renderList(list);
+           // Filter by category if needed
+    const filteredList = this.category ? 
+      list.filter(product => product.Category.Name === this.category) : 
+      list;
+    
+    this.renderList(filteredList);
     }
 
-    // render list method
+    // render list method);
     renderList(list) {
-        // use the map method to call the productCardTemplate once
-        //const htmlStrings = list.map(productCardTemplate);
-        // render the list template
-        //this.listElement.insertAdjacentHTML("aferbegin", htmlStrings.join(""));
-
-        // apply this new utility function instead of the commented code above
-        renderListWithTemplate(productCardTemplate, this.listElement, list);
+    renderListWithTemplate(
+      productCardTemplate, 
+      this.listElement, 
+      list, 
+      'beforeend', 
+      true
+    );
+    
     }
 }

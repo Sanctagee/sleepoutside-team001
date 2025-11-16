@@ -35,15 +35,22 @@ export function getParam(param) {
   // return that value, in this case, the product
   return product;
 }
-
-export function renderListWithTemplate(template, parentElement, list, position = "afterbegin", clear = false) {
-  const htmlStrings = list.map(template);
-  // if clear is true, we need to clear out the contents of the perent
+export function renderListWithTemplate(
+  templateFn, 
+  parentElement, 
+  list, 
+  position = "afterbegin", 
+  clear = false
+) {
   if (clear) {
-    parentElement.innerHTML = "";
+    parentElement.innerHTML = '';
   }
-  parentElement.insertAdjacentHTML(position, htmlStrings.join(""));
+  const htmlStrings = list.map(templateFn);
+  parentElement.insertAdjacentHTML(position, htmlStrings.join(''));
 }
+
+
+
 
 // Add a superscript number of items in the cart to the backpack icon in the header
 // Create a function to handle counting of items. 
