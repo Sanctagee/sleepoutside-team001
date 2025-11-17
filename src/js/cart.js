@@ -44,16 +44,13 @@ function renderCartContents() {
   // Add event listeners to remove buttons
   addRemoveButtonListeners();
 
-  // call the incrementDecrementButtons function here
+  // call the incrementDecrementButtons function
   incrementDecrementButtons();
   
 }
 
 // call renderCartContents
 renderCartContents();
-
-
-
 
 function addRemoveButtonListeners() {
   const removeButtons = document.querySelectorAll('.remove-btn');
@@ -73,7 +70,7 @@ function removeFromCart(index) {
     setLocalStorage("so-cart", cartItems);
     renderCartContents(); // Refresh the cart display
   }
-  // update the cart count in the header
+  // update the cart count in header
   loadHeaderFooter();
 }
 

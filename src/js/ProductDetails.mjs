@@ -76,20 +76,7 @@ addProductToCart() {
   cartCount();
 }
 
-// lock addTocart button once
-// lockAddToCartButton() {
-//   const addBtn = document.getElementById("addToCart");
-
-//   // if addTocart button has not been cliced to add a product before
-//   if(!addBtn)
-//     return;
-
-//   addBtn.textContent = "Already added";
-//   addBtn.disabled = true;
-//   addBtn.classList.add("disabled-addTocartBtn");
-// }
-
-
+// modal class for product that is already added to the cart
 showAlreadyAddedModal() {
   const modal = document.getElementById("addedModal");
   modal.classList.remove("hide");

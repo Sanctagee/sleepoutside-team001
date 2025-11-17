@@ -322,6 +322,7 @@ button {
 }
 }
 
+/* showAlreadyAddedModal styling */
 .modal {
   position: fixed;
   top: 0;
