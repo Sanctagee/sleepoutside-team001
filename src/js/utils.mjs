@@ -62,16 +62,27 @@ export async function loadTemplate(path) {
 
 //loads the header and footer
 export async function loadHeaderFooter() {
-  const headerTemplate = await loadTemplate("../partials/header.html");
-  const headerElement = document.querySelector("#main-header");
+  try {
+    // Determine base path based on current page location
+    const basePath = window.location.pathname.includes('/product_listing/') ? '../' : 
+                    window.location.pathname.includes('/product_pages/') ? '../' :
+                    window.location.pathname.includes('/cart/') ? '../' :
+                    window.location.pathname.includes('/checkout/') ? '../' : './';
 
-  const footerTemplate = await loadTemplate("../partials/footer.html");
-  const footerElement = document.querySelector("#main-footer");
-  renderWithTemplate(headerTemplate, headerElement);
-  renderWithTemplate(footerTemplate, footerElement);
+    const headerTemplate = await loadTemplate(`${basePath}partials/header.html`);
+    const headerElement = document.querySelector("#main-header");
 
-  // Update cart count in header
-  cartCount();
+    const footerTemplate = await loadTemplate(`${basePath}partials/footer.html`);
+    const footerElement = document.querySelector("#main-footer");
+    
+    renderWithTemplate(headerTemplate, headerElement);
+    renderWithTemplate(footerTemplate, footerElement);
+
+    // Update cart count in header
+    cartCount();
+  } catch (error) {
+    console.error('Error loading header/footer:', error);
+  }
 }
 
 
