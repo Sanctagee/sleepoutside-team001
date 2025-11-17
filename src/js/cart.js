@@ -1,62 +1,109 @@
-//import { getLocalStorage, loadHeaderFooter } from "./utils.mjs";
-import { getLocalStorage, setLocalStorage, loadHeaderFooter } from "./utils.mjs";
+import { getLocalStorage } from "./utils.mjs";
 
-loadHeaderFooter();
+function calculateCartTotal(cartItems) {
+  return cartItems.reduce((total, item) => total + item.FinalPrice, 0);
+}
 
-function renderCartContents() {
+function updateCartTotal() {
   const cartItems = getLocalStorage("so-cart") || [];
-  
-  if (cartItems.length === 0) {
-    document.querySelector(".product-list").innerHTML = 
-      '<li class="cart-card divider"><p>Your cart is empty</p></li>';
-    return;
+  const total = calculateCartTotal(cartItems);
+  const totalElement = document.getElementById("cartTotal");
+
+  if (totalElement) {
+    totalElement.textContent = total.toFixed(2);
+  }
+}
+
+function cartItemTemplate(item) {
+  let imagePath = item.Image;
+  if (imagePath.startsWith("../")) {
+    imagePath = imagePath.substring(3);
+  }
+  if (!imagePath.startsWith("/")) {
+    imagePath = "/" + imagePath;
   }
 
-  const htmlItems = cartItems.map((item, index) => cartItemTemplate(item, index));
-  document.querySelector(".product-list").innerHTML = htmlItems.join("");
-  
-  // Add event listeners to remove buttons
-  addRemoveButtonListeners();
+  return `
+    <li class="cart-card divider">
+      <span class="remove-item" data-id="${item.Id}">X</span>
+      <a href="../product_pages/index.html?product=${item.Id}" class="cart-card__image">
+        <img src="${imagePath}" alt="${item.Name}" />
+      </a>
+      <div class="cart-card__info">
+        <a href="../product_pages/index.html?product=${item.Id}">
+          <h2 class="card__name">${item.Name}</h2>
+        </a>
+        <p class="cart-card__color">${item.Colors?.[0]?.ColorName || "Standard Color"}</p>
+        <p class="cart-card__quantity">qty: 1</p>
+        <p class="cart-card__price">$${item.FinalPrice.toFixed(2)}</p>
+      </div>
+    </li>
+  `;
 }
 
-function cartItemTemplate(item, index) {
-  const newItem = `<li class="cart-card divider">
-    <a href="#" class="cart-card__image">
-      <img src="${item.Image}" alt="${item.Name}" />
-    </a>
-    <a href="#">
-      <h2 class="card__name">${item.Name}</h2>
-    </a>
-    <p class="cart-card__color">${item.Colors[0].ColorName}</p>
-    <p class="cart-card__quantity">qty: 1</p>
-    <p class="cart-card__price">$${item.FinalPrice}</p>
-    <button class="remove-btn" data-index="${index}">Remove</button>
-  </li>`;
+function removeFromCart(productId) {
+  let cart = JSON.parse(localStorage.getItem("so-cart")) || [];
 
-  return newItem;
+  const removedItem = cart.find((item) => item.Id === productId);
+
+  cart = cart.filter((item) => item.Id !== productId);
+
+  localStorage.setItem("so-cart", JSON.stringify(cart));
+
+  renderCartContents();
 }
 
-renderCartContents();
-// loadHeaderFooter();
-function addRemoveButtonListeners() {
-  const removeButtons = document.querySelectorAll('.remove-btn');
-  removeButtons.forEach(button => {
-    button.addEventListener('click', function() {
-      const index = parseInt(this.getAttribute('data-index'));
-      removeFromCart(index);
+function addRemoveListeners() {
+  const removeButtons = document.querySelectorAll(".remove-item");
+
+  removeButtons.forEach((button) => {
+    button.addEventListener("click", (e) => {
+      const productId = e.target.getAttribute("data-id");
+      removeFromCart(productId);
     });
   });
 }
 
-function removeFromCart(index) {
-  let cartItems = getLocalStorage("so-cart") || [];
-  
-  if (index >= 0 && index < cartItems.length) {
-    cartItems.splice(index, 1);
-    setLocalStorage("so-cart", cartItems);
-    renderCartContents(); // Refresh the cart display
+function renderCartContents() {
+  const cartItems = getLocalStorage("so-cart") || [];
+  const cartContainer = document.querySelector(".product-list");
+
+  if (!cartContainer) {
+    return;
   }
+
+  if (cartItems.length === 0) {
+    cartContainer.innerHTML = "<p>Your cart is empty</p>";
+    updateCartTotal();
+    return;
+  }
+
+  const htmlStrings = cartItems.map(cartItemTemplate);
+  cartContainer.innerHTML = htmlStrings.join("");
+
+  updateCartTotal();
+
+  addRemoveListeners();
 }
 
-// Initialize cart when page loads
-document.addEventListener('DOMContentLoaded', renderCartContents);
+document.addEventListener("DOMContentLoaded", function () {
+  renderCartContents();
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+  const checkoutButton = document.querySelector(".checkout-button");
+  if (checkoutButton) {
+    checkoutButton.addEventListener("click", function () {
+      const cartItems = getLocalStorage("so-cart") || [];
+      if (cartItems.length === 0) {
+        alert("Your cart is empty!");
+        return;
+      }
+      alert(
+        `Proceeding to checkout with $${calculateCartTotal(cartItems).toFixed(2)} total`,
+      );
+    });
+  }
+});
+
+export { renderCartContents, calculateCartTotal };
