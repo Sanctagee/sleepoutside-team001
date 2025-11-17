@@ -17,17 +17,29 @@ export default class ProductDetails {
 
     // render the product details 
     this.renderProductDetails();
+
+    // get the addTocart button
     const addBtn = document.getElementById("addToCart");
-    if (addBtn) {
+
+    // get the local storage
+    const cartItems = getLocalStorage("so-cart") || [];
+
+    // find existing item in cart
+    const existingItem = cartItems.find(item => item.Id === this.product.Id);
+
+    if(existingItem) {
+      // update the addBtn and show modal
+      addBtn.addEventListener("click", () => this.showAlreadyAddedModal());
+    } else {
       addBtn.addEventListener("click", () => this.addProductToCart(this.product));
     }
 
-    // ensure the cart count is initialized on the product page
+    // update cart count
     cartCount();
   }
 
 
-// To create the function that will add products to cart:
+// create the addProductTocart class
 addProductToCart() {
   // Always get cart items or initialize as empty array
   let cartItems = getLocalStorage("so-cart");
@@ -43,10 +55,18 @@ addProductToCart() {
   if(existingItem) {
     // if it exists, just increment its quantity
     existingItem.quantity += 1;
+
+    // Show modal after adding again
+    this.showAlreadyAddedModal();
+
+
   } else {
     // if it's a new item, add it to the cart with quantity of 1
     const newItem = { ...this.product, quantity: 1};
     cartItems.push(newItem);
+
+    // update the lockAddToCartButton
+    //this.lockAddToCartButton();
   }
   
   // save updated cart back to local storage
@@ -55,6 +75,31 @@ addProductToCart() {
   // update the cart count badge
   cartCount();
 }
+
+// lock addTocart button once
+// lockAddToCartButton() {
+//   const addBtn = document.getElementById("addToCart");
+
+//   // if addTocart button has not been cliced to add a product before
+//   if(!addBtn)
+//     return;
+
+//   addBtn.textContent = "Already added";
+//   addBtn.disabled = true;
+//   addBtn.classList.add("disabled-addTocartBtn");
+// }
+
+
+showAlreadyAddedModal() {
+  const modal = document.getElementById("addedModal");
+  modal.classList.remove("hide");
+
+  // Close button
+  document.getElementById("modalClose").addEventListener("click", () => {
+    modal.classList.add("hide");
+  });
+}
+
 
 // render the products details template
 renderProductDetails() {
