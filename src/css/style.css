@@ -220,7 +220,7 @@ button:hover{
   padding: 1rem;
 }
 
-.product-list {
+.product-list, .product-grid {
   display: flex;
   flex-flow: row wrap;
   list-style-type: none;

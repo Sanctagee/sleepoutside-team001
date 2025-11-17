@@ -1,6 +1,7 @@
 //import { getLocalStorage, loadHeaderFooter } from "./utils.mjs";
 import { getLocalStorage, setLocalStorage, loadHeaderFooter } from "./utils.mjs";
 
+// Load the header and footer
 loadHeaderFooter();
 
 function renderCartContents() {
@@ -19,11 +20,14 @@ function renderCartContents() {
   addRemoveButtonListeners();
 }
 
+// call renderCartContents
+renderCartContents();
+
 function cartItemTemplate(item, index) {
   // FIX: Use actual quantity instead of hardcoded "1"
   return `<li class="cart-card divider">
     <a href="#" class="cart-card__image">
-      <img src="${item.Image}" alt="${item.Name}" />
+      <img src="${item.Images.PrimaryMedium}" alt="${item.Name}" />
     </a>
     <a href="#">
       <h2 class="card__name">${item.Name}</h2>
@@ -36,8 +40,7 @@ function cartItemTemplate(item, index) {
 
 }
 
-renderCartContents();
-// loadHeaderFooter();
+
 function addRemoveButtonListeners() {
   const removeButtons = document.querySelectorAll('.remove-btn');
   removeButtons.forEach(button => {

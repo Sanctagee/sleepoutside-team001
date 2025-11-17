@@ -85,11 +85,11 @@ renderProductDetails() {
 
 // create dynamic template using index.html from product_pages
 function productDetailsTemplate(product) {
-  qs("h2").textContent = product.Brand.Name;
-  qs("h3").textContent = product.NameWithoutBrand;
+  qs(".product_brand_name").textContent = product.Brand.Name;
+  qs(".product_name").textContent = product.NameWithoutBrand;
 
   const productImage = qs(".product__image");
-  productImage.src = product.Image;
+  productImage.src = product.Images.PrimaryLarge;
   productImage.alt = product.NameWithoutBrand;
 
 
