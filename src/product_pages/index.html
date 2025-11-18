@@ -1,12 +1,15 @@
 <!doctype html>
+
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>Sleep Outside | Product Make and Name</title>
 
     <link rel="stylesheet" href="../css/style.css" />
+
     <script src="../js/product.js" type="module"></script>
   </head>
 
@@ -23,13 +26,25 @@
         <p class="product-card__price"></p>
         <p class="product__color"></p>
         <p class="product__description"></p>
+
         <div class="product-detail__add">
-          <button id="addToCart" data-id="">Add to Cart</button>
+          <button id="addToCart" data-id="344YJ">Add to Cart</button>
         </div>
       </section>
+
+      <!-- addToCart modal view -->
+    <div id="addedModal" class="modal hide">
+    <div class="modal-content">
+    <button class="modal-close" id="modalClose">&times;</button>
+
+    <h2>Already Added</h2>
+    <p>This product is already in your cart.<br>Do you want to add more?</p>
+
+    <a href="/cart/index.html" id="modalYes" class="modal-yes">Yes</a>
+    </div>
+    </div>
     </main>
 
-    <!-- REMOVED STATIC FOOTER CONTENT - Only keep empty placeholder -->
     <footer id="main-footer"></footer>
   </body>
 </html>

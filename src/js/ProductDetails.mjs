@@ -17,30 +17,56 @@ export default class ProductDetails {
 
     // render the product details 
     this.renderProductDetails();
+
+    // get the addTocart button
     const addBtn = document.getElementById("addToCart");
-    if (addBtn) {
-      addBtn.addEventListener("click", () => this.addToCart());
+
+    // get the local storage
+    const cartItems = getLocalStorage("so-cart") || [];
+
+    // find existing item in cart
+    const existingItem = cartItems.find(item => item.Id === this.product.Id);
+
+    if(existingItem) {
+      // update the addBtn and show modal
+      addBtn.addEventListener("click", () => this.showAlreadyAddedModal());
+    } else {
+      addBtn.addEventListener("click", () => this.addProductToCart(this.product));
     }
 
-    // ensure the cart count is initialized on the product page
+    // update cart count
     cartCount();
   }
 
-// Creating the function that will add item to cart
-addToCart() {
-  let cartItems = getLocalStorage("so-cart") || [];
+
+// create the addProductTocart class
+addProductToCart() {
+  // Always get cart items or initialize as empty array
+  let cartItems = getLocalStorage("so-cart");
   
+  // In a condition when it's not an array, start fresh with empty array
   if (!Array.isArray(cartItems)) {
     cartItems = [];
   }
 
+  // find if the item already exists in the cart
   const existingItem = cartItems.find((item) => item.Id === this.product.Id);
 
   if(existingItem) {
+    // if it exists, just increment its quantity
     existingItem.quantity += 1;
+
+    // Show modal after adding again
+    this.showAlreadyAddedModal();
+
+
   } else {
+    // if it's a new item, add it to the cart with quantity of 1
     const newItem = { ...this.product, quantity: 1};
     cartItems.push(newItem);
+
+    // update the lockAddToCartButton
+    //this.lockAddToCartButton();
   }
   
   // save updated cart back to local storage
@@ -48,33 +74,18 @@ addToCart() {
 
   // update the cart count badge
   cartCount();
-
-  // 🎯 MODERN NOTIFICATION (instead of basic alert)
-  this.showCartNotification();
 }
 
-// 🎯 ADD THIS NEW METHOD TO YOUR ProductDetails CLASS
-showCartNotification() {
-  // Remove existing notification if any
-  const existingNotification = document.querySelector('.cart-notification');
-  if (existingNotification) {
-    existingNotification.remove();
-  }
+// modal class for product that is already added to the cart
+showAlreadyAddedModal() {
+  const modal = document.getElementById("addedModal");
+  modal.classList.remove("hide");
 
-  // Create new notification
-  const notification = document.createElement('div');
-  notification.className = 'cart-notification';
-  notification.innerHTML = `✅ ${this.product.Name} added to cart!`;
-  
-  // Add to page
-  document.body.appendChild(notification);
-  
-  // Auto-remove after 3 seconds
-  setTimeout(() => {
-    notification.remove();
-  }, 3000);
+  // Close button
+  document.getElementById("modalClose").addEventListener("click", () => {
+    modal.classList.add("hide");
+  });
 }
-
 
 
 // render the products details template

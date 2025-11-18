@@ -13,9 +13,3 @@ const dataSource = new ProductData("tents");
 
 const product = new ProductDetails(productId, dataSource);
 product.init();
-<<<<<<< HEAD
-
-loadHeaderFooter();
-
-=======
->>>>>>> dd8b1f619a6ce5b5e37c089f194bf65a00e46e36
