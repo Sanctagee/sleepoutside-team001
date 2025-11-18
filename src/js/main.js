@@ -4,6 +4,18 @@ import ProductList from "./ProductList.mjs";
 import { qs, cartCount } from "./utils.mjs";
 
 import { loadHeaderFooter } from "./utils.mjs";
+import Alert from "./Alert.mjs";
+
+document.addEventListener("DOMContentLoaded", async function () {
+  loadHeaderFooter();
+  if (
+    window.location.pathname.endsWith("index.html") ||
+    window.location.pathname === "/"
+  ) {
+    const alertSystem = new Alert();
+    await alertSystem.init();
+  }
+});
 
 // create an instance of ProductData
 const dataSource = new ProductData("tents");

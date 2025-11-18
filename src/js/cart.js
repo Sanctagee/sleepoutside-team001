@@ -1,33 +1,41 @@
-import { getLocalStorage, setLocalStorage, loadHeaderFooter } from "./utils.mjs";
+import {
+  getLocalStorage,
+  setLocalStorage,
+  loadHeaderFooter,
+} from "./utils.mjs";
 
 loadHeaderFooter();
 
 function renderCartContents() {
   const cartItems = getLocalStorage("so-cart") || [];
   const cartElement = document.querySelector(".product-list");
-  
+
   if (!cartElement) {
     console.error("❌ Cart element not found");
     return;
   }
 
   if (cartItems.length === 0) {
-    cartElement.innerHTML = '<li class="cart-card divider"><p>Your cart is empty</p></li>';
+    cartElement.innerHTML =
+      "<li class='cart-card divider'><p>Your cart is empty</p></li>";
     return;
   }
 
-  const htmlItems = cartItems.map((item, index) => cartItemTemplate(item, index));
+  const htmlItems = cartItems.map((item, index) =>
+    cartItemTemplate(item, index),
+  );
   cartElement.innerHTML = htmlItems.join("");
-  
+
   addRemoveButtonListeners();
 }
 
 function cartItemTemplate(item, index) {
   // Use the actual image from API data
-  const imageUrl = item.Images?.PrimaryMedium || item.Image || '../images/placeholder.jpg';
-  const productName = item.Name || item.NameWithoutBrand || 'Unknown Product';
-  const colorName = item.Colors?.[0]?.ColorName || 'N/A';
-  
+  const imageUrl =
+    item.Images?.PrimaryMedium || item.Image || "../images/placeholder.jpg";
+  const productName = item.Name || item.NameWithoutBrand || "Unknown Product";
+  const colorName = item.Colors?.[0]?.ColorName || "N/A";
+
   return `<li class="cart-card divider">
     <a href="#" class="cart-card__image">
       <img src="${imageUrl}" alt="${productName}" />
@@ -43,10 +51,10 @@ function cartItemTemplate(item, index) {
 }
 
 function addRemoveButtonListeners() {
-  const removeButtons = document.querySelectorAll('.remove-btn');
-  removeButtons.forEach(button => {
-    button.addEventListener('click', function() {
-      const index = parseInt(this.getAttribute('data-index'));
+  const removeButtons = document.querySelectorAll(".remove-btn");
+  removeButtons.forEach((button) => {
+    button.addEventListener("click", function () {
+      const index = parseInt(this.getAttribute("data-index"));
       removeFromCart(index);
     });
   });
@@ -54,7 +62,7 @@ function addRemoveButtonListeners() {
 
 function removeFromCart(index) {
   let cartItems = getLocalStorage("so-cart") || [];
-  
+
   if (index >= 0 && index < cartItems.length) {
     cartItems.splice(index, 1);
     setLocalStorage("so-cart", cartItems);
@@ -63,4 +71,4 @@ function removeFromCart(index) {
 }
 
 // Initialize cart when page loads
-document.addEventListener('DOMContentLoaded', renderCartContents);
+document.addEventListener("DOMContentLoaded", renderCartContents);
