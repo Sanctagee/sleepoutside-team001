@@ -305,6 +305,47 @@ button:hover{
   grid-column: 3;
 }
 
+/* ==================Styles for the Categories Section ================== */
+
+.categories {
+  padding: 2rem;
+  text-align: center;
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.category-card {
+  display: block;
+  padding: 1.5rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #333;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.category-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.category-card img {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 0.5rem;
+}
+
+.category-card h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
 /* add styling of cart count badge in the header */
 .count-items {
   display: flex;
@@ -346,4 +387,41 @@ button:hover{
 footer {
   font-size: var(--small-font);
   padding: 1em;
+}
+
+/* Alert Styles */
+.alert-list {
+  margin: 1rem auto;
+  max-width: 1200px;
+  padding: 0 1rem;
+}
+
+.alert-list p {
+  padding: 1rem;
+  margin: 0.5rem 0;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.1rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  animation: slideDown 0.5s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .alert-list p {
+    font-size: 1rem;
+    padding: 0.8rem;
+  }
 }

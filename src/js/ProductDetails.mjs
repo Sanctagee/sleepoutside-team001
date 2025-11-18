@@ -83,25 +83,55 @@ renderProductDetails() {
 }
 }
 
-// create dynamic template using index.html from product_pages
+// To create dynamic template using index.html from product_pages
+
 function productDetailsTemplate(product) {
+<<<<<<< HEAD
   qs(".product_brand_name").textContent = product.Brand.Name;
   qs(".product_name").textContent = product.NameWithoutBrand;
 
   const productImage = qs(".product__image");
   productImage.src = product.Images.PrimaryLarge;
   productImage.alt = product.NameWithoutBrand;
+=======
+  const h3Element = qs("h3");
+  const h2Element = qs("h2");
+  
+  if (h3Element) h3Element.textContent = product.Brand.Name;
+  if (h2Element) h2Element.textContent = product.NameWithoutBrand;
 
+  const productImage = qs(".product__image");
+  if (productImage) {
+    productImage.src = product.Images.PrimaryLarge;
+    productImage.alt = product.NameWithoutBrand;
+  }
+>>>>>>> wpl--individual3
 
-  // NEW: Calculate the discount percentage
-  const discountPercentage = Math.round(((product.SuggestedRetailPrice - product.FinalPrice) / product.SuggestedRetailPrice) * 100);
+  // Calculate discount (API data structure)
+  const discountPercentage = product.SuggestedRetailPrice ? 
+    Math.round(((product.SuggestedRetailPrice - product.FinalPrice) / product.SuggestedRetailPrice) * 100) : 0;
 
-  // Insert discount badge
-  qs(".product__srp").textContent = `$${product.SuggestedRetailPrice}`;
-  qs(".product__discount").textContent = `${discountPercentage}% OFF`;
-  qs(".product-card__price").textContent = `$${product.FinalPrice}`;
-  qs(".product__color").textContent = product.Colors[0].ColorName;
-  qs(".product__description").innerHTML = product.DescriptionHtmlSimple;
+  // Update elements
+  const srpElement = qs(".product__srp");
+  const discountElement = qs(".product__discount");
+  const priceElement = qs(".product-card__price");
+  const colorElement = qs(".product__color");
+  const descriptionElement = qs(".product__description");
+  
+  if (srpElement && product.SuggestedRetailPrice) {
+    srpElement.textContent = `$${product.SuggestedRetailPrice}`;
+  }
+  if (discountElement && discountPercentage > 0) {
+    discountElement.textContent = `${discountPercentage}% OFF`;
+  }
+  if (priceElement) priceElement.textContent = `$${product.FinalPrice}`;
+  if (colorElement && product.Colors && product.Colors[0]) {
+    colorElement.textContent = product.Colors[0].ColorName;
+  }
+  if (descriptionElement) descriptionElement.innerHTML = product.DescriptionHtml;
 
-  document.getElementById('addToCart').dataset.id = product.Id;
+  const addToCartBtn = document.getElementById('addToCart');
+  if (addToCartBtn) {
+    addToCartBtn.dataset.id = product.Id;
+  }
 }
