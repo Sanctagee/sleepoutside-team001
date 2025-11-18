@@ -27,9 +27,13 @@ export default class ProductList {
     }
 
     renderList(list) {
-        // Clear existing content
         this.listElement.innerHTML = "";
-        renderListWithTemplate(productCardTemplate, this.listElement, list);
+        
+        if (!list || list.length === 0) {
+            this.listElement.innerHTML = "<p>No products found.</p>";
+            return;
+        }
+        renderListWithTemplate(productCardTemplate, this.listElement, list, "beforeend", false);
     }
 
     updatePageTitle() {

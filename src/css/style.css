@@ -368,6 +368,43 @@ button:hover{
     color: #777; /* optional: makes it look faded */
 }
 
+/* Container for search input */
+#search {
+  display: flex;
+  justify-content: center; /* center the search bar */
+  margin: 20px 0;
+}
+
+/* Style the input box */
+#searchInput {
+  width: 100%;
+  max-width: 95%; /* limits how wide it can get */
+  padding: 10px 15px;
+  font-size: 16px;
+  border: 2px solid #ccc; /* light gray border */
+  border-radius: 25px; /* rounded corners */
+  outline: none;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+/* Highlight on focus */
+#searchInput:focus {
+  border-color: #83573F; 
+  box-shadow: 0 0 5px #B8874C;
+}
+
+#searchInput:hover {
+  border-color: #aaa;
+  box-shadow: 0 0 5px #B8874C;
+}
+
+/* Placeholder style */
+#searchInput::placeholder {
+  border-color: #83573F; 
+  font-style: italic;
+}
+
+
 @media screen and (min-width: 500px) {
   body {
     max-width: 1080px;

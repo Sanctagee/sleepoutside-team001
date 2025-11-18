@@ -5,6 +5,10 @@ import { qs, cartCount } from "./utils.mjs";
 
 import { loadHeaderFooter } from "./utils.mjs";
 
+import { filterData, displayResults } from './search.js';
+
+
+
 // create an instance of ProductData
 const dataSource = new ProductData("tents");
 
@@ -17,3 +21,18 @@ const productList = new ProductList("Tents", dataSource, element);
 productList.init().then(() => cartCount());
 
 loadHeaderFooter();
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  const searchInput = document.getElementById('searchInput');
+  const searchResultsContainer = 'searchResults';
+
+  searchInput.addEventListener('input', (event) => {
+    const query = event.target.value;
+    const filtered = filterData(dataSource, query);
+    displayResults(filtered, searchResultsContainer);
+  });
+
+  // Initial display (optional)
+  displayResults(dataSource, searchResultsContainer);
+});
