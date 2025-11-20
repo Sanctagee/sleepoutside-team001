@@ -28,6 +28,8 @@ function renderCartContents() {
   cartElement.innerHTML = htmlItems.join("");
 
   addRemoveButtonListeners();
+
+  calculateItemSummary();
 }
 
 // call renderCartContents
@@ -80,6 +82,42 @@ function removeFromCart(index) {
     setLocalStorage("so-cart", cartItems);
     renderCartContents();
   }
+}
+
+const taxRate = 0.06;
+
+function calculateShipping(cartItems) {
+  if (cartItems.length === 0) return 0;
+
+  const firstItem = 10;
+  const additionalItem = 2;
+
+  if (cartItems.length === 1) return firstItem;
+  
+  return firstItem + (cartItems.length - 1) * additionalItem;
+}
+
+function calculateItemSummary() {
+  const cartItems = getLocalStorage("so-cart") || [];
+  let subtotal = 0;
+
+
+  //add up all items
+  cartItems.forEach(item => {
+    const qty = item.quantity || 1;
+    subtotal += item.FinalPrice * qty;
+  });
+
+  //calculate values
+  const tax = subtotal * taxRate;
+  const shipping = calculateShipping(cartItems);
+  const orderTotal = subtotal + tax + shipping;
+
+  //update Order Summary
+  document.getElementById("subtotal").textContent = subtotal.toFixed(2);
+  document.getElementById("tax").textContent = tax.toFixed(2);
+  document.getElementById("shipping").textContent = shipping.toFixed(2);
+  document.getElementById("order-total").textContent = orderTotal.toFixed(2);
 }
 
 // Initialize cart when page loads
