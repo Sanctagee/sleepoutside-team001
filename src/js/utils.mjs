@@ -134,3 +134,83 @@ export function cartCount() {
     }
   }
 }
+
+
+// INDIVIDUAL TASK: Alert message utility
+export function alertMessage(message, scroll = true) {
+  // Remove existing alerts
+  const existingAlert = document.querySelector('.custom-alert');
+  if (existingAlert) {
+    existingAlert.remove();
+  }
+
+  // Create alert element
+  const alert = document.createElement('div');
+  alert.className = 'custom-alert';
+  alert.innerHTML = `
+    <div class="alert-content">
+      <span class="alert-message">${message}</span>
+      <button class="alert-close">&times;</button>
+    </div>
+  `;
+
+  // Add styles
+  alert.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #f8d7da;
+    color: #721c24;
+    padding: 1rem;
+    border: 1px solid #f5c6cb;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 1000;
+    max-width: 400px;
+    animation: slideInRight 0.3s ease-out;
+  `;
+
+  alert.querySelector('.alert-content').style.cssText = `
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+  `;
+
+  alert.querySelector('.alert-close').style.cssText = `
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #721c24;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  `;
+
+  // Add to page
+  document.body.appendChild(alert);
+
+  // Close button functionality
+  alert.querySelector('.alert-close').addEventListener('click', () => {
+    alert.remove();
+  });
+
+  // Auto-remove after 5 seconds
+  setTimeout(() => {
+    if (alert.parentElement) {
+      alert.remove();
+    }
+  }, 5000);
+
+  // Scroll to top if requested
+  if (scroll) {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  console.log('📢 Alert displayed:', message);
+  return alert;
+}

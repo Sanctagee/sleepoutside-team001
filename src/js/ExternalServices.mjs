@@ -1,8 +1,6 @@
+
 const baseURL = import.meta.env.VITE_SERVER_URL;
 
-<<<<<<< HEAD
-async function convertToJson(res) {
-=======
 const mockProducts = {
   tents: [
     {
@@ -86,33 +84,24 @@ const mockProducts = {
   ],
 };
 
-function convertToJson(res) {
->>>>>>> wpl--individual3
+
+// INDIVIDUAL TASK: Enhanced error handling
+async function convertToJson(res) {
+  const jsonResponse = await res.json();
   if (res.ok) {
-    return res.json();
+    return jsonResponse;
   } else {
-    throw new Error(`Bad Response: ${res.status} ${res.statusText}`);
+    // Enhanced error handling for individual task
+    throw { 
+      name: 'servicesError', 
+      message: jsonResponse,
+      status: res.status,
+      statusText: res.statusText
+    };
   }
 }
 
-export default class ProductData {
-<<<<<<< HEAD
-  constructor() {
-    // this.category = category;
-    // this.path = `../public/json/${this.category}.json`;
-  }
-
-  async getData(category) {
-    const response = await fetch(`${baseURL}products/search/${category}`);
-    const data = await convertToJson(response);
-    return data.Result;
-  }
-  
-  async findProductById(id) {
-      const response = await fetch(`${baseURL}product/${id}`);
-      const data = await convertToJson(response);
-      return data.Result;
-=======
+export default class ExternalServices {
   constructor() {}
 
   async getData(category) {
@@ -133,7 +122,6 @@ export default class ProductData {
         `❌ API failed for ${category}, using mock data:`,
         error.message,
       );
-      // Fallback para dados mock
       return mockProducts[category] || [];
     }
   }
@@ -156,13 +144,34 @@ export default class ProductData {
         `❌ API failed for product ${id}, using mock data:`,
         error.message,
       );
-      // Fallback: encontrar o produto nos dados mock
       for (const category in mockProducts) {
         const product = mockProducts[category].find((p) => p.Id === id);
         if (product) return product;
       }
       return null;
     }
->>>>>>> wpl--individual3
+  }
+
+  async checkout(payload) {
+    try {
+      console.log('🔄 Sending checkout request...', payload);
+      
+      const options = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      };
+      
+      const response = await fetch(`${baseURL}/checkout`, options);
+      const data = await convertToJson(response);
+      
+      console.log('✅ Checkout successful:', data);
+      return data;
+    } catch (error) {
+      console.error('❌ Checkout failed:', error);
+      throw error;
+    }
   }
 }
