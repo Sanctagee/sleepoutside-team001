@@ -1,5 +1,6 @@
 // product-listing.js
 import ProductData from "./ProductData.mjs";
+import ExternalServices from './ExternalServices.mjs';
 import ProductList from "./ProductList.mjs";
 import { loadHeaderFooter, getParam } from "./utils.mjs";
 import { filterData } from './search.js';
@@ -9,7 +10,8 @@ loadHeaderFooter();
 const category = getParam("category");
 
 // Load ALL data for that category
-const dataSource = new ProductData(category);
+// Initialize product list
+const dataSource = new ExternalServices();
 const listElement = document.querySelector(".product-list");
 const productList = new ProductList(category, dataSource, listElement);
 

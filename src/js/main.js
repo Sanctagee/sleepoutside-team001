@@ -1,9 +1,6 @@
-// read the product data out
-import ProductData from "./ProductData.mjs";
-import ProductList from "./ProductList.mjs";
-import { qs, cartCount } from "./utils.mjs";
 
 import { loadHeaderFooter } from "./utils.mjs";
+import Alert from "./Alert.mjs";
 
 import { filterData, displayResults } from './search.js';
 
@@ -36,3 +33,15 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initial display (optional)
   displayResults(dataSource, searchResultsContainer);
 });
+document.addEventListener("DOMContentLoaded", async function () {
+  loadHeaderFooter();
+  if (
+    window.location.pathname.endsWith("index.html") ||
+    window.location.pathname === "/"
+  ) {
+    const alertSystem = new Alert();
+    await alertSystem.init();
+  }
+});
+
+// loadHeaderFooter();

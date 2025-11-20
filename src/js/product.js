@@ -1,24 +1,17 @@
+
 import { getParam, loadHeaderFooter } from "./utils.mjs";
-import ProductData from "./ProductData.mjs";
+import ExternalServices from "./ExternalServices.mjs";
 import ProductDetails from "./ProductDetails.mjs";
 
-// Load dynamic header/footer FIRST
+// Load header and footer on page load
 loadHeaderFooter();
 
-// Get product ID from URL parameter
 const productId = getParam("product");
-console.log("🛠️ Debug - Product ID:", productId);
-console.log("🛠️ Debug - Current URL:", window.location.href);
+console.log("Product ID from URL:", productId);
 
-// Initialize with API data source
-const dataSource = new ProductData();
+const dataSource = new ExternalServices();
 
-// Debug: Check if we can find the product
-dataSource.findProductById(productId).then(product => {
-    console.log("🛠️ Debug - Found Product:", product);
-    const productDetails = new ProductDetails(productId, dataSource);
-    productDetails.init();
-}).catch(error => {
-    console.error("🛠️ Debug - Product Loading Error:", error);
-    document.querySelector("main").innerHTML = "<p>Error loading product. Check console.</p>";
-});
+// Test the getParam function in product.js to see if the productId displays in the URL when a product is clicked.
+const product = new ProductDetails(productId, dataSource);
+product.init();
+

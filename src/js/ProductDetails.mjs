@@ -1,104 +1,81 @@
-// import functions from modules
 import { getLocalStorage, setLocalStorage, qs, cartCount } from "./utils.mjs";
 
-// create the product details class
 export default class ProductDetails {
-  // keep tract of important product info
   constructor(productId, dataSource) {
     this.productId = productId;
     this.product = {};
     this.dataSource = dataSource;
   }
 
-  // create the init() class
   async init() {
-    // get product details using findProductById
     this.product = await this.dataSource.findProductById(this.productId);
-
-    // render the product details 
     this.renderProductDetails();
+    
     const addBtn = document.getElementById("addToCart");
     if (addBtn) {
       addBtn.addEventListener("click", () => this.addToCart());
     }
 
-    // ensure the cart count is initialized on the product page
     cartCount();
   }
 
-// Creating the function that will add item to cart
-addToCart() {
-  let cartItems = getLocalStorage("so-cart") || [];
-  
-  if (!Array.isArray(cartItems)) {
-    cartItems = [];
+  addToCart() {
+    let cartItems = getLocalStorage("so-cart") || [];
+    
+    if (!Array.isArray(cartItems)) {
+      cartItems = [];
+    }
+
+    const existingItem = cartItems.find((item) => item.Id === this.product.Id);
+
+    if(existingItem) {
+      existingItem.quantity += 1;
+    } else {
+      const newItem = { ...this.product, quantity: 1};
+      cartItems.push(newItem);
+    }
+    
+    setLocalStorage("so-cart", cartItems);
+    cartCount();
+    this.showCartNotification();
   }
 
-  const existingItem = cartItems.find((item) => item.Id === this.product.Id);
+  showCartNotification() {
+    const existingNotification = document.querySelector('.cart-notification');
+    if (existingNotification) {
+      existingNotification.remove();
+    }
 
-  if(existingItem) {
-    existingItem.quantity += 1;
-  } else {
-    const newItem = { ...this.product, quantity: 1};
-    cartItems.push(newItem);
-  }
-  
-  // save updated cart back to local storage
-  setLocalStorage("so-cart", cartItems);
-
-  // update the cart count badge
-  cartCount();
-
-  // 🎯 MODERN NOTIFICATION (instead of basic alert)
-  this.showCartNotification();
-}
-
-// 🎯 ADD THIS NEW METHOD TO YOUR ProductDetails CLASS
-showCartNotification() {
-  // Remove existing notification if any
-  const existingNotification = document.querySelector('.cart-notification');
-  if (existingNotification) {
-    existingNotification.remove();
+    const notification = document.createElement('div');
+    notification.className = 'cart-notification';
+    notification.innerHTML = `✅ ${this.product.Name} added to cart!`;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+      notification.remove();
+    }, 3000);
   }
 
-  // Create new notification
-  const notification = document.createElement('div');
-  notification.className = 'cart-notification';
-  notification.innerHTML = `✅ ${this.product.Name} added to cart!`;
-  
-  // Add to page
-  document.body.appendChild(notification);
-  
-  // Auto-remove after 3 seconds
-  setTimeout(() => {
-    notification.remove();
-  }, 3000);
-}
-
-
-
-// render the products details template
-renderProductDetails() {
+  renderProductDetails() {
     productDetailsTemplate(this.product);
+  }
 }
-}
-
-// To create dynamic template using index.html from product_pages
 
 function productDetailsTemplate(product) {
   const h3Element = qs("h3");
   const h2Element = qs("h2");
   
-  if (h3Element) h3Element.textContent = product.Brand.Name;
-  if (h2Element) h2Element.textContent = product.NameWithoutBrand;
+  if (h3Element) h3Element.textContent = product.Brand?.Name || "Unknown Brand";
+  if (h2Element) h2Element.textContent = product.NameWithoutBrand || product.Name || "Unknown Product";
 
   const productImage = qs(".product__image");
-  if (productImage) {
-    productImage.src = product.Images.PrimaryLarge;
-    productImage.alt = product.NameWithoutBrand;
+  if (productImage && product.Images) {
+    productImage.src = product.Images.PrimaryLarge || product.Images.PrimaryMedium || "../images/placeholder.jpg";
+    productImage.alt = product.NameWithoutBrand || product.Name || "Product Image";
   }
 
-  // Calculate discount (API data structure)
+  // Calculate discount
   const discountPercentage = product.SuggestedRetailPrice ? 
     Math.round(((product.SuggestedRetailPrice - product.FinalPrice) / product.SuggestedRetailPrice) * 100) : 0;
 
@@ -119,7 +96,9 @@ function productDetailsTemplate(product) {
   if (colorElement && product.Colors && product.Colors[0]) {
     colorElement.textContent = product.Colors[0].ColorName;
   }
-  if (descriptionElement) descriptionElement.innerHTML = product.DescriptionHtml;
+  if (descriptionElement && product.DescriptionHtml) {
+    descriptionElement.innerHTML = product.DescriptionHtml;
+  }
 
   const addToCartBtn = document.getElementById('addToCart');
   if (addToCartBtn) {

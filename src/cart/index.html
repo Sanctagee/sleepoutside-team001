@@ -51,7 +51,19 @@
           <!-- Cart items will be dynamically inserted here -->
         </ul>
       </section>
+      <div class="cart-totals">
+        <p>Subtotal: $<span id="subtotal">0.00</span></p>
+        <p>Tax (6%): $<span id="tax">0.00</span></p>
+        <p>Shipping Estimate: $<span id="shipping">0.00</span></p>
+        <p><strong>Order Total: $<span id="order-total">0.00</span></strong></p>
+      </div>
     </main>
+
+    <!-- Add this AFTER the cart totals section -->
+    <div class="checkout-actions">
+      <a href="../checkout/index.html" class="btn-primary btn-large">Proceed to Checkout</a>
+      <a href="../index.html" class="btn-secondary">Continue Shopping</a>
+    </div>
 
     <!-- EMPTY FOOTER PLACEHOLDER -->
     <footer id="main-footer"></footer>
