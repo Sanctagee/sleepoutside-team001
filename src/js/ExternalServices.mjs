@@ -1,5 +1,4 @@
 
-
 const baseURL = import.meta.env.VITE_SERVER_URL;
 
 const mockProducts = {
@@ -85,20 +84,23 @@ const mockProducts = {
   ],
 };
 
-// UPDATED: Enhanced error handling for Week 4
+
+// INDIVIDUAL TASK: Enhanced error handling
 async function convertToJson(res) {
   const jsonResponse = await res.json();
   if (res.ok) {
     return jsonResponse;
   } else {
+    // Enhanced error handling for individual task
     throw { 
       name: 'servicesError', 
-      message: jsonResponse 
+      message: jsonResponse,
+      status: res.status,
+      statusText: res.statusText
     };
   }
 }
 
-// CHANGED: Renamed class from ProductData to ExternalServices
 export default class ExternalServices {
   constructor() {}
 
@@ -120,7 +122,6 @@ export default class ExternalServices {
         `❌ API failed for ${category}, using mock data:`,
         error.message,
       );
-      // Fallback to mock data
       return mockProducts[category] || [];
     }
   }
@@ -143,7 +144,6 @@ export default class ExternalServices {
         `❌ API failed for product ${id}, using mock data:`,
         error.message,
       );
-      // Fallback: find product in mock data
       for (const category in mockProducts) {
         const product = mockProducts[category].find((p) => p.Id === id);
         if (product) return product;
@@ -152,7 +152,6 @@ export default class ExternalServices {
     }
   }
 
-  // NEW: Checkout method required for Week 4 team activity
   async checkout(payload) {
     try {
       console.log('🔄 Sending checkout request...', payload);

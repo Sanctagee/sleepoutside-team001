@@ -1,5 +1,5 @@
 import CheckoutProcess from "./CheckoutProcess.mjs";
-import { loadHeaderFooter } from "./utils.mjs";
+import { loadHeaderFooter, alertMessage } from "./utils.mjs";
 
 // Load header and footer
 loadHeaderFooter();
@@ -8,7 +8,7 @@ loadHeaderFooter();
 const checkout = new CheckoutProcess("so-cart", ".checkout-summary");
 checkout.init();
 
-// Add form submit listener
+// INDIVIDUAL TASK: Enhanced form submission with error handling
 document.querySelector("#checkoutForm").addEventListener("submit", async (e) => {
   e.preventDefault();
   
@@ -28,13 +28,22 @@ document.querySelector("#checkoutForm").addEventListener("submit", async (e) => 
     console.log("✅ Checkout completed successfully");
     
   } catch (error) {
-    console.error("❌ Checkout failed:", error);
-    
-    // Show error message
-    alert(`Checkout failed: ${error.message || "Please check your information and try again."}`);
+    console.error("❌ Checkout failed in main handler:", error);
     
     // Reset button
     submitBtn.textContent = originalText;
     submitBtn.disabled = false;
+    
+    // Additional error handling (backup)
+    if (!error.message.includes('required fields')) {
+      alertMessage("Checkout failed. Please check your information and try again.", true);
+    }
   }
+});
+
+// INDIVIDUAL TASK: Debug logging
+document.addEventListener("DOMContentLoaded", () => {
+  const cartItems = JSON.parse(localStorage.getItem("so-cart") || "[]");
+  console.log("🛒 Cart contents for checkout:", cartItems);
+  console.log("🔧 CheckoutProcess initialized with enhanced error handling");
 });
