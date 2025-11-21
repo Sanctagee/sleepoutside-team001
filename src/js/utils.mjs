@@ -9,8 +9,24 @@ export function getParam(param) {
   return urlParams.get(param);
 }
 
-// or a more concise version if you are into that sort of thing:
-// export const qs = (selector, parent = document) => parent.querySelector(selector);
+export function renderListWithTemplate(
+  templateFn,
+  parentElement,
+  list,
+  position = "afterbegin",
+  clear = false
+) {
+  // Clear out the element if requested
+  if (clear) {
+    parentElement.innerHTML = "";
+  }
+
+  // Transform each item into HTML using the template function
+  const htmlStrings = list.map(templateFn).join("");
+
+  // Insert into the DOM at the specified position
+  parentElement.insertAdjacentHTML(position, htmlStrings);
+}
 
 // retrieve data from localstorage
 export function getLocalStorage(key) {
