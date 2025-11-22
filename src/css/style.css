@@ -241,6 +241,20 @@ button {
   grid-column: 3;
 }
 
+
+/* adding styling to the discount */
+.product-old-price {
+  text-decoration: line-through;
+  color: #777;
+}
+
+.discount-badge {
+  background-color: red;
+  color: white;
+  padding: 3px 7px;
+  border-radius: 3px;
+}
+
 /* add styling of cart count badge in the header */
 .count-items {
   display: flex;
