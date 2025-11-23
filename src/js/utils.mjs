@@ -243,7 +243,7 @@ export function addProductToCart(product) {
     cartItems.push(newItem);
   }
   setLocalStorage("so-cart", cartItems);
-  // Update cart count in header (use existing cartCount function)
+  // Update cart count in header (use existing cartCount function).
   if (typeof cartCount === 'function') {
     cartCount();
   }

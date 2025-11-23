@@ -41,7 +41,7 @@ export default class ProductList {
       btn.addEventListener("click", () => {
         const product = list.find((p) => p.Id == btn.dataset.id);
 
-        // NEW: Added this block of code for the discountBadge in the product_listing landing page and the modal
+        // NEW: Added this block of code for the discountBadge in the product_listing landing page and the modal.
         const discountBadge = getDiscountBadge(product);
         let priceHtml = `<p class="product-card__price">$${product.FinalPrice}</p>`;
         if (discountBadge) {
