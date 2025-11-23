@@ -48,10 +48,19 @@
     <main>
       <section class="products">
         <h2>Top Products</h2> 
-        <ul class="product-list">
+        <ul class="product-list" id="product_List">
           <!-- Products will be dynamically inserted here -->
         </ul>
       </section>
+
+      <!-- Quick View Modal -->
+       <div class="quick-view-modal">
+        <div class="quick-view-inner">
+          <button class="close-btn" aria-label="Close">&times;</button>
+          <div class="quick-view-card"></div>
+          <button id="quickViewAddToCart" class="quick-view-add-btn">Add to Cart</button>
+        </div>
+      </div>
     </main>
 
     <!-- EMPTY FOOTER PLACEHOLDER -->
