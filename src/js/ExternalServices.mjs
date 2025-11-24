@@ -1,4 +1,3 @@
-
 const baseURL = import.meta.env.VITE_SERVER_URL;
 
 const mockProducts = {
@@ -34,6 +33,37 @@ const mockProducts = {
       Colors: [{ ColorName: "Golden Oak/Saffron Yellow" }],
       DescriptionHtmlSimple:
         "Enjoy a fun night under stars with your favorite people.",
+    },
+    {
+      Id: "985PR",
+      Name: "The North Face Alpine Guide Tent - 3-Person, 4-Season",
+      NameWithoutBrand: "Alpine Guide Tent - 3-Person, 4-Season",
+      Image: {
+        PrimaryMedium:
+          "/images/tents/the-north-face-alpine-guide-tent-3-person-4-season-in-canary-yellow-high-rise-grey~p~985pr_01~320.jpg",
+        PrimaryLarge:
+          "/images/tents/the-north-face-alpine-guide-tent-3-person-4-season-in-canary-yellow-high-rise-grey~p~985pr_01~320.jpg",
+      },
+      Brand: { Name: "The North Face" },
+      FinalPrice: 349.99,
+      Colors: [{ ColorName: "Canary Yellow/High Rise Grey" }],
+      DescriptionHtmlSimple:
+        "Be ready for any outdoor adventure with the hybrid design.",
+    },
+    {
+      Id: "344YJ",
+      Name: "Cedar Ridge Rimrock Tent - 2-Person, 3-Season",
+      NameWithoutBrand: "Rimrock Tent - 2-Person, 3-Season",
+      Image: {
+        PrimaryMedium:
+          "/images/tents/cedar-ridge-rimrock-tent-2-person-3-season-in-rust-clay~p~344yj_01~320.jpg",
+        PrimaryLarge:
+          "/images/tents/cedar-ridge-rimrock-tent-2-person-3-season-in-rust-clay~p~344yj_01~320.jpg",
+      },
+      Brand: { Name: "Cedar Ridge" },
+      FinalPrice: 69.99,
+      Colors: [{ ColorName: "Rust/Clay" }],
+      DescriptionHtmlSimple: "Lightweight and ready for adventure.",
     },
   ],
   backpacks: [
@@ -84,7 +114,6 @@ const mockProducts = {
   ],
 };
 
-
 // INDIVIDUAL TASK: Enhanced error handling
 async function convertToJson(res) {
   const jsonResponse = await res.json();
@@ -92,11 +121,11 @@ async function convertToJson(res) {
     return jsonResponse;
   } else {
     // Enhanced error handling for individual task
-    throw { 
-      name: 'servicesError', 
+    throw {
+      name: "servicesError",
       message: jsonResponse,
       status: res.status,
-      statusText: res.statusText
+      statusText: res.statusText,
     };
   }
 }
@@ -154,23 +183,23 @@ export default class ExternalServices {
 
   async checkout(payload) {
     try {
-      console.log('🔄 Sending checkout request...', payload);
-      
+      console.log("🔄 Sending checkout request...", payload);
+
       const options = {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
       };
-      
+
       const response = await fetch(`${baseURL}/checkout`, options);
       const data = await convertToJson(response);
-      
-      console.log('✅ Checkout successful:', data);
+
+      console.log("✅ Checkout successful:", data);
       return data;
     } catch (error) {
-      console.error('❌ Checkout failed:', error);
+      console.error("❌ Checkout failed:", error);
       throw error;
     }
   }

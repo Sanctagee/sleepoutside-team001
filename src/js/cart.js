@@ -2,7 +2,7 @@ import {
   getLocalStorage,
   setLocalStorage,
   loadHeaderFooter,
-  qs
+  qs,
 } from "./utils.mjs";
 
 // Load the header and footer
@@ -36,40 +36,31 @@ function renderCartContents() {
 
 // FIXED: Better image path handling
 function cartItemTemplate(item, index) {
-  // Handle different image path structures
+  console.log("🎨 Renderizando item do carrinho:", item.Id);
+
+  // CORREÇÃO DA IMAGEM
   let imageUrl = "../images/placeholder.jpg";
-  
-  if (item.Images?.PrimaryMedium) {
-    imageUrl = item.Images.PrimaryMedium;
-  } else if (item.Image) {
+  if (item.Image && typeof item.Image === "object") {
+    imageUrl =
+      item.Image.PrimaryMedium ||
+      item.Image.PrimaryLarge ||
+      "../images/placeholder.jpg";
+  } else if (typeof item.Image === "string") {
     imageUrl = item.Image;
-  } else if (item.Images?.PrimaryLarge) {
-    imageUrl = item.Images.PrimaryLarge;
-  }
-  
-  // Fix relative paths - if image path doesn't start with http or /
-  if (!imageUrl.startsWith('http') && !imageUrl.startsWith('/') && !imageUrl.startsWith('..')) {
-    imageUrl = '../' + imageUrl;
   }
 
-  const productName = item.Name || item.NameWithoutBrand || "Unknown Product";
-  const colorName = item.Colors?.[0]?.ColorName || "N/A";
-  const itemTotal = (item.FinalPrice * (item.quantity || 1)).toFixed(2);
-
+  // CORREÇÃO DO TEMPLATE - use remove-btn e data-index
   return `<li class="cart-card divider">
-    <a href="#" class="cart-card__image">
-      <img src="${imageUrl}" alt="${productName}" onerror="this.src='../images/placeholder.jpg'" />
-    </a>
-    <a href="../product_pages/index.html?product=${item.Id}">
-      <h2 class="card__name">${productName}</h2>
-    </a>
-    <p class="cart-card__color">${colorName}</p>
-    <p class="cart-card__quantity">qty: <span class="quantity-display">${item.quantity || 1}</span></p>
-    <p class="cart-card__price">$${itemTotal}</p>
-    <div class="cart-actions">
-      <button class="quantity-btn decrease" data-index="${index}">-</button>
-      <button class="quantity-btn increase" data-index="${index}">+</button>
-      <button class="remove-btn" data-index="${index}">Remove</button>
+    <button class="remove-btn" data-index="${index}">❌</button>
+    <div class="cart-card__image">
+      <img src="${imageUrl}" alt="${item.Name}" 
+           onerror="this.src='../images/placeholder.jpg'">
+    </div>
+    <div class="cart-card__info">
+      <h2 class="card__name">${item.Name}</h2>
+      <p class="cart-card__color">${item.Colors?.[0]?.ColorName || "Standard Color"}</p>
+      <p class="cart-card__quantity">qty: ${item.quantity || 1}</p>
+      <p class="cart-card__price">$${item.FinalPrice}</p>
     </div>
   </li>`;
 }
@@ -119,7 +110,7 @@ function updateQuantity(index, change) {
   if (index >= 0 && index < cartItems.length) {
     const item = cartItems[index];
     const newQuantity = (item.quantity || 1) + change;
-    
+
     if (newQuantity <= 0) {
       // Remove item if quantity becomes 0 or less
       removeFromCart(index);
@@ -146,7 +137,7 @@ function calculateShipping(cartItems) {
   }, 0);
 
   if (totalItems === 1) return firstItem;
-  
+
   return firstItem + (totalItems - 1) * additionalItem;
 }
 
@@ -158,11 +149,13 @@ function calculateItemSummary() {
   console.log("🛒 Calculating totals for", cartItems.length, "items");
 
   // Add up all items with quantities
-  cartItems.forEach(item => {
+  cartItems.forEach((item) => {
     const qty = item.quantity || 1;
     const itemTotal = item.FinalPrice * qty;
     subtotal += itemTotal;
-    console.log(`📦 ${item.Name}: $${item.FinalPrice} x ${qty} = $${itemTotal}`);
+    console.log(
+      `📦 ${item.Name}: $${item.FinalPrice} x ${qty} = $${itemTotal}`,
+    );
   });
 
   // Calculate values
@@ -174,7 +167,7 @@ function calculateItemSummary() {
     subtotal: subtotal.toFixed(2),
     tax: tax.toFixed(2),
     shipping: shipping.toFixed(2),
-    orderTotal: orderTotal.toFixed(2)
+    orderTotal: orderTotal.toFixed(2),
   });
 
   // Update Order Summary - with null checks
@@ -203,4 +196,4 @@ function resetCartTotals() {
 }
 
 // Initialize cart when page loads
-document.addEventListener("DOMContentLoaded", renderCartContents);  
+document.addEventListener("DOMContentLoaded", renderCartContents);
