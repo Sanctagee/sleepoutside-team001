@@ -125,7 +125,7 @@ button:hover{
   transition: all .3s ease-in-out;
   background-color: var(--btnHover);
 }
-.remove-btn {
+.remove-btn, .qty-controls button {
   background: var(--danger-color);
   color: white;
   border: none;
@@ -135,7 +135,7 @@ button:hover{
   margin-top: 10px;
 }
 
-.remove-btn:hover {
+.remove-btn:hover, .qty-controls button:hover {
   background: var(--danger-hover);
   transform: translateY(-4px) scale(1.1);
   transition: all .3s ease-in-out;
@@ -367,6 +367,39 @@ button:hover{
     text-decoration: line-through;
     color: #777; /* optional: makes it look faded */
 }
+
+/* quantity controls */
+.qty-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0.5rem 0;
+}
+
+.qty-controls .qty-input {
+  width: 48px;
+  height: 32px;
+  text-align: center;
+  font-size: var(--font-base);
+  color: var(--dark-grey);
+  border: 2px solid var(--light-grey);
+  border-radius: var(--border-radius);
+  background: #fff;
+  outline: none;
+
+  transition: border 0.2s ease-in-out;
+}
+
+.qty-controls .qty-input:focus {
+  border-color: var(--primary-color);
+}
+
+/* Makes sure it stays aligned correctly in cart grid */
+.cart-card .qty-controls {
+  grid-column: 2;
+  grid-row: 3;
+}
+
 
 @media screen and (min-width: 500px) {
   body {

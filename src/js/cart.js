@@ -5,21 +5,21 @@ loadHeaderFooter();
 function renderCartContents() {
   const cartItems = getLocalStorage("so-cart") || [];
   const cartElement = document.querySelector(".product-list");
+  const cartCount = document.querySelector(".count-items");
   
-  if (!cartElement) {
-    console.error("❌ Cart element not found");
-    return;
-  }
+  if (!cartElement) return console.error("❌ Cart element not found");
+
+  cartCount.textContent = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
 
   if (cartItems.length === 0) {
     cartElement.innerHTML = '<li class="cart-card divider"><p>Your cart is empty</p></li>';
     return;
   }
 
-  const htmlItems = cartItems.map((item, index) => cartItemTemplate(item, index));
-  cartElement.innerHTML = htmlItems.join("");
+  cartElement.innerHTML = cartItems.map((item, index) => cartItemTemplate(item, index)).join("");
   
   addRemoveButtonListeners();
+  addQuantityListeners();
 }
 
 function cartItemTemplate(item, index) {
@@ -27,39 +27,80 @@ function cartItemTemplate(item, index) {
   const imageUrl = item.Images?.PrimaryMedium || item.Image || '../images/placeholder.jpg';
   const productName = item.Name || item.NameWithoutBrand || 'Unknown Product';
   const colorName = item.Colors?.[0]?.ColorName || 'N/A';
+  const quantity = item.quantity || 1;
   
-  return `<li class="cart-card divider">
+  return `<li class="cart-card divider" data-index="${index}>
     <a href="#" class="cart-card__image">
       <img src="${imageUrl}" alt="${productName}" />
     </a>
-    <a href="#">
+    <div>
       <h2 class="card__name">${productName}</h2>
-    </a>
-    <p class="cart-card__color">${colorName}</p>
-    <p class="cart-card__quantity">qty: ${item.quantity || 1}</p>
-    <p class="cart-card__price">$${item.FinalPrice}</p>
-    <button class="remove-btn" data-index="${index}">Remove</button>
+      <p class="cart-card__color">${colorName}</p>
+
+      <div class="qty-controls">
+        <button class="qty-decrease">-</button>
+        <input type="number" class="qty-input" min="1" value="${quantity}">
+        <button class="qty-increase">+</button>
+      </div>
+
+      <p class="cart-card__price">$${item.FinalPrice}</p>
+      <button class="remove-btn">Remove</button>
+      </div>
   </li>`;
 }
 
+function addQuantityListeners() {
+  const cartItems = getLocalStorage("so-cart") || [];
+
+  document.querySelectorAll(".cart-card").forEach(card => {
+    const index = parseInt(card.CDATA_SECTION_NODE.index);
+    const item = cartItems[index];
+
+    const input = card.querySelector(".qty-input");
+    const btnMinus = card.querySelector(".qty-decrease");
+    const btnPlus = card.querySelector(".qty-increase");
+
+    // input change
+    input.addEventListener("change", () => {
+      let qty = parseInt(input.value);
+      if (isNaN(qty) || qty < 1) qty = 1;
+      item.quantity = qty;
+      saveAndRender(cartItems);
+    })
+
+    // minus button
+    btnMinus.addEventListener("click", () => {
+      if (item.quantity > 1) {
+        item.quantity--;
+        input.value = item.quantity;
+        saveAndRender(cartItems);
+      }
+    })
+
+    // plus button
+    btnPlus.addEventListener("click", () => {
+      item.quantity++;
+      input.value = item.quantity;
+      saveAndRender(cartItems);
+    })
+  })
+}
+
 function addRemoveButtonListeners() {
-  const removeButtons = document.querySelectorAll('.remove-btn');
-  removeButtons.forEach(button => {
-    button.addEventListener('click', function() {
-      const index = parseInt(this.getAttribute('data-index'));
-      removeFromCart(index);
-    });
+  const cartItems = getLocalStorage("so-cart") || [];
+
+  document.querySelectorAll(".remove-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const index = parseInt(btn.closest(".cart-card").getAttribute("data-index"));
+      cartItems.splice(index, 1);
+      saveAndRender(cartItems);
+    })
   });
 }
 
-function removeFromCart(index) {
-  let cartItems = getLocalStorage("so-cart") || [];
-  
-  if (index >= 0 && index < cartItems.length) {
-    cartItems.splice(index, 1);
-    setLocalStorage("so-cart", cartItems);
-    renderCartContents();
-  }
+function saveAndRender(cartItems) {
+  setLocalStorage("so-cart", cartItems);
+  renderCartContents();
 }
 
 // Initialize cart when page loads
