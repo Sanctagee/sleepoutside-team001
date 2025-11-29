@@ -71,6 +71,22 @@ p {
   background-color: white;
 }
 
+.hero .categories {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background-color: var(--light-grey);
+  opacity: 0.8;
+  display: flex;
+  justify-content: center;
+}
+.hero .categories p{
+  text-decoration: none;
+  color: var(--dark-grey);
+  padding: 0.5em 1em;
+  font-weight: bold;
+}
+
 .logo--square {
   font-size: var(--small-font);
   width: 110px;
