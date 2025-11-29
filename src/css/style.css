@@ -157,6 +157,34 @@ button:hover{
   position: relative;
 }
 
+/*==== BreadCrumbs ====*/
+.breadcrumb {
+  font-size: 14px;
+  margin: 15px 0;
+  color: #555;
+}
+
+.breadcrumb a {
+  text-decoration: none;
+  color: #0077cc;
+  /* link color */
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+.breadcrumb .separator {
+  margin: 0 5px;
+  color: #999;
+  /* lighter arrow */
+}
+
+.breadcrumb .current {
+  font-weight: bold;
+  color: #333;
+  /* darker to show current page */
+}
 
 /* ====== FOr the Notification ====== */
 /* Cart notification styles */

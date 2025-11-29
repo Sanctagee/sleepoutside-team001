@@ -2,6 +2,7 @@
 import { loadHeaderFooter } from "./utils.mjs";
 import Alert from "./Alert.mjs";
 
+
 document.addEventListener("DOMContentLoaded", async function () {
   loadHeaderFooter();
   if (
@@ -12,5 +13,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     await alertSystem.init();
   }
 });
+
+
 
 // loadHeaderFooter();
