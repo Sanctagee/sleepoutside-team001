@@ -18,13 +18,11 @@ export default class ProductDetails {
     // render the product details 
     this.renderProductDetails();
 
-    document
-      .getElementById("addToCart")
-      .addEventListener("click", this.addToCart.bind(this));
-    // const addBtn = document.getElementById("addToCart");
-    // if (addBtn) {
-    //   addBtn.addEventListener("click", () => this.addToCart());
-    // }
+
+    const addBtn = document.getElementById("addToCart");
+    if (addBtn) {
+      addBtn.addEventListener("click", this.addToCart.bind(this));
+    }
 
     // ensure the cart count is initialized on the product page
     cartCount();
@@ -32,7 +30,7 @@ export default class ProductDetails {
 
 // Creating the function that will add item to cart
 addToCart() {
-  const cartItems = getLocalStorage("so-cart") || [];
+  let cartItems = getLocalStorage("so-cart") || [];
   
   if (!Array.isArray(cartItems)) {
     cartItems = [];

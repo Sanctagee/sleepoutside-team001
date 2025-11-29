@@ -5,13 +5,13 @@ import { loadHeaderFooter, getParam } from "./utils.mjs";
 // Load dynamic header/footer
 loadHeaderFooter();
 
-// Get category from URL parameter
-const category = getParam("category");
+document.addEventListener("DOMContentLoaded", () => {
+    // Get category from URL parameter
+    const category = getParam("category") || "all";
+    // Initialize product list
+    const dataSource = new ProductData();
+    const listElement = document.querySelector(".product-list");
+    const productList = new ProductList(category, dataSource, listElement);
 
-// Initialize product list
-const dataSource = new ProductData();
-const listElement = document.querySelector(".product-list");
-const productList = new ProductList(category, dataSource, listElement);
-
-productList.init();
-
+    productList.init();
+})

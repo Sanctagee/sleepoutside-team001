@@ -16,11 +16,10 @@ export function setLocalStorage(key, data) {
 
 // set a listener for both touchend and click
 export function setClick(selector, callback) {
-  qs(selector).addEventListener("touchend", (event) => {
-    event.preventDefault();
-    callback();
-  });
-  qs(selector).addEventListener("click", callback);
+  const el = qs(selector);
+  if (!el) return;
+  el.addEventListener("touchend", (event) => { event.preventDefault(); callback(); });
+  el.addEventListener("click", callback); 
 }
 
 // this function extracts and returns the value of a query parameter from the page's URL
@@ -75,8 +74,8 @@ export async function loadHeaderFooter() {
     const footerTemplate = await loadTemplate(`${basePath}partials/footer.html`);
     const footerElement = document.querySelector("#main-footer");
     
-    renderWithTemplate(headerTemplate, headerElement);
-    renderWithTemplate(footerTemplate, footerElement);
+    if (headerElement) renderWithTemplate(headerTemplate, headerElement);
+    if (footerElement) renderWithTemplate(footerTemplate, footerElement);
 
     // Update cart count in header
     cartCount();
@@ -94,7 +93,7 @@ export function cartCount() {
 
   // Sum the quantity of all items in the cart
   // guard for items that might not have a quantity property (treat as 1)
-  const count = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  const count = cartItems.reduce((sum, item) => sum + (item.quantity || 1 ), 0);
 
   // Get the DOM element for output
   const countElement = qs(".count-items");

@@ -9,12 +9,15 @@ function renderCartContents() {
   
   if (!cartElement) return console.error("❌ Cart element not found");
 
+  // updates the cart count
   cartCount.textContent = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
 
+  // handles an empty cart
   if (cartItems.length === 0) {
     cartElement.innerHTML = '<li class="cart-card divider"><p>Your cart is empty</p></li>';
     return;
   }
+
 
   cartElement.innerHTML = cartItems.map((item, index) => cartItemTemplate(item, index)).join("");
   
@@ -29,7 +32,7 @@ function cartItemTemplate(item, index) {
   const colorName = item.Colors?.[0]?.ColorName || 'N/A';
   const quantity = item.quantity || 1;
   
-  return `<li class="cart-card divider" data-index="${index}>
+  return `<li class="cart-card divider" data-index="${index}">
     <a href="#" class="cart-card__image">
       <img src="${imageUrl}" alt="${productName}" />
     </a>
@@ -43,7 +46,7 @@ function cartItemTemplate(item, index) {
         <button class="qty-increase">+</button>
       </div>
 
-      <p class="cart-card__price">$${item.FinalPrice}</p>
+      <p class="cart-card__price">$${item.FinalPrice ?? '0.00'}</p>
       <button class="remove-btn">Remove</button>
       </div>
   </li>`;
@@ -53,7 +56,7 @@ function addQuantityListeners() {
   const cartItems = getLocalStorage("so-cart") || [];
 
   document.querySelectorAll(".cart-card").forEach(card => {
-    const index = parseInt(card.CDATA_SECTION_NODE.index);
+    const index = parseInt(card.getAttribute("data-index"));
     const item = cartItems[index];
 
     const input = card.querySelector(".qty-input");
