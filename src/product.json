@@ -1,0 +1,16 @@
+[
+  {
+    "Id": "001",
+    "Name": "Mountain Tent",
+    "Price": 199.99,
+    "Image": "../images/products/tent-1.png",
+    "Category": "tents"
+  },
+  {
+    "Id": "002",
+    "Name": "Camping Backpack",
+    "Price": 89.99,
+    "Image": "../images/products/backpack-1.png",
+    "Category": "backpacks"
+  }
+]
