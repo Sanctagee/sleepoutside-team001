@@ -9,6 +9,7 @@ loadHeaderFooter();
 
 const category = getParam('category') ;
 const dataSource = new ProductData();
+document.querySelector('h1').textContent = `Top Products: ${category}`;
 
 const listElement = document.querySelector('.product-list');
 const myList = new ProductList(cartegory, dataSource, listElement);

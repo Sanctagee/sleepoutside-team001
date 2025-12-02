@@ -3,8 +3,27 @@ import ProductData from "./ProductData.mjs";
 import { getParam } from './utils.mjs';
 import ProductDetails from './ProductDetails.mjs';
 
-const productId = getParam('product');
-const dataSource = new ProductData('tents');
+import ProductData from './ProductData.js';
+import { loadHeaderFooter, getParam } from './utils.mjs';
+
+loadHeaderFooter();
+
+const productId = getParam('id');
+const dataSource = new ProductData();
+
+async function renderProductDetail() {
+  const product = await dataSource.findProductById(productId);
+
+  document.querySelector('.product-detail').innerHTML = `
+    <h1>${product.Name}</h1>
+    <img src="${product.Images.PrimaryLarge}" alt="${product.Name}">
+    <p>${product.Description}</p>
+    <p>Price: $${product.FinalPrice}</p>
+  `;
+}
+
+renderProductDetail();
+
 const product = new ProductDetails(productId, dataSource);
 product.init();
 
@@ -32,4 +51,6 @@ async function addToCartHandler(e) {
 document
   .getElementById("addToCart")
   .addEventListener("click", addToCartHandler);
+
+  
   
