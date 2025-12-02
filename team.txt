@@ -11,4 +11,10 @@ Bryan Ivan Mino
 Umaru Bayoh
 Richard Oshiomole Ogboanoh
 Wesley Pontes Lima
+<<<<<<< HEAD
 Emily Emerson Cotilda N 
+=======
+Emily Emerson
+Moses Butro Jerson
+Oribi Teo-Iyalla
+>>>>>>> ee529849cd664015aeae045416c869db175d0348

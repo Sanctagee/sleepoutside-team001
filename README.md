@@ -16,6 +16,10 @@
 -Bryan Ivan Mino
 -Umaru Bayoh
 -Moses Butro Jeremiah
+-Emily Emerson
+-Richard Oshiomole
+-Oribi Teo-Iyalla
+-Oluwadamilare Kayode Dani Olamide
 
 ## Project Overview
 
@@ -49,4 +53,5 @@ cd sleepoutside-team001
 npm install
 
 # Start development server
+
 npm run start
