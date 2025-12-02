@@ -2,7 +2,6 @@
 export function qs(selector, parent = document) {
   return parent.querySelector(selector);
 }
-<<<<<<< HEAD
 
 export function getParam(param) {
   const queryString = window.location.search;
@@ -28,8 +27,6 @@ export function renderListWithTemplate(
   // Insert into the DOM at the specified position
   parentElement.insertAdjacentHTML(position, htmlStrings);
 }
-=======
->>>>>>> ee529849cd664015aeae045416c869db175d0348
 
 // retrieve data from localstorage
 export function getLocalStorage(key) {

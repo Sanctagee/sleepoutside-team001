@@ -1,34 +1,3 @@
-<<<<<<< HEAD
-export default class ProductDetails {
-  constructor(productId, dataSource) {
-    this.productId = productId;
-    this.dataSource = dataSource;
-    this.product = {};
-  }
-
-  async init() {
-    // get product details
-    this.product = await this.dataSource.findProductById(this.productId);
-    // render details
-    this.renderProductDetails();
-    // add to cart button
-    document.getElementById('addToCart')
-      .addEventListener('click', this.addProductToCart.bind(this));
-  }
-
-  addProductToCart() {
-    // logic to add product to cart
-    console.log(`${this.product.Name} added to cart`);
-  }
-
-  renderProductDetails() {
-    // Example: populate HTML
-    document.querySelector('#productName').textContent = this.product.Name;
-    document.querySelector('#productDescription').textContent = this.product.Description;
-    document.querySelector('#productImage').src = this.product.Image;
-  }
-}
-=======
 import { getLocalStorage, setLocalStorage, qs, cartCount } from "./utils.mjs";
 
 export default class ProductDetails {
@@ -136,4 +105,3 @@ function productDetailsTemplate(product) {
     addToCartBtn.dataset.id = product.Id;
   }
 }
->>>>>>> ee529849cd664015aeae045416c869db175d0348
