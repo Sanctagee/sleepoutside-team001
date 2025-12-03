@@ -62,6 +62,24 @@ function addRemoveListeners() {
       removeFromCart(productId);
     });
   });
+
+  // Quantity increase buttons
+  const increaseButtons = document.querySelectorAll(".quantity-btn.increase");
+  increaseButtons.forEach((button) => {
+    button.addEventListener("click", function () {
+      const index = parseInt(this.getAttribute("data-index"));
+      updateQuantity(index, 1); // Increase by 1
+    });
+  });
+
+  // Quantity decrease buttons
+  const decreaseButtons = document.querySelectorAll(".quantity-btn.decrease");
+  decreaseButtons.forEach((button) => {
+    button.addEventListener("click", function () {
+      const index = parseInt(this.getAttribute("data-index"));
+      updateQuantity(index, -1); // Decrease by 1
+    });
+  });
 }
 
 function renderCartContents() {

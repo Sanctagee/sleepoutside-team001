@@ -3,11 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <title>Sleep Outside | Product Make and Name</title>
-
+    <title>Sleep Outside | Product Listing</title>
     <link rel="stylesheet" href="../css/style.css" />
-    <script src="../js/product.js" type="module"></script>
+    <script src="../js/product-listing.js" type="module"></script>
   </head>
 
   <body>
@@ -46,20 +44,13 @@
          <span class="count-items">0</span>
       </div>
     </header>
-
-    <main class="divider">
-      <section class="product-detail">
-        <h2 class="product_brand_name"></h2>
-        <h3 class="product_name divider"></h3>
-        <img class="product__image"/>
-        <p class="product__discount"></p>
-        <p class="product__srp"><span class="old-price"></span></p>
-        <p class="product-card__price"></p>
-        <p class="product__color"></p>
-        <p class="product__description"></p>
-        <div class="product-detail__add">
-          <button id="addToCart" data-id="">Add to Cart</button>
-        </div>
+    
+    <main>
+      <section class="products">
+        <h2>Top Products</h2> 
+        <ul class="product-list">
+          <!-- Products will be dynamically inserted here -->
+        </ul>
       </section>
     </main>
 
