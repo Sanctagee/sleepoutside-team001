@@ -27,8 +27,6 @@ export default class ProductList {
     }
 
     renderList(list) {
-        // Clear existing content
-        this.listElement.innerHTML = "";
         renderListWithTemplate(productCardTemplate, this.listElement, list);
     }
 
