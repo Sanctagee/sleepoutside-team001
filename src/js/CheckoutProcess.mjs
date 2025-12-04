@@ -1,24 +1,29 @@
 import { getLocalStorage } from "./utils.mjs";
 import ExternalServices from "./ExternalServices.mjs";
 
+const services = new ExternalServices();
+
 function formDataToJSON(formElement) {
+  // convert the form data to a JSON object
   const formData = new FormData(formElement);
   const convertedJSON = {};
-
-  formData.forEach(function (value, key) {
+  formData.forEach((value, key) => {
     convertedJSON[key] = value;
   });
-
   return convertedJSON;
 }
 
 function packageItems(items) {
-  return items.map(item => ({
-    id: item.Id,
-    name: item.Name,
-    price: item.FinalPrice,
-    quantity: item.quantity || 1
-  }));
+  const simplifiedItems = items.map((item) => {
+    console.log(item);
+    return {
+      id: item.Id,
+      price: item.FinalPrice,
+      name: item.Name,
+      quantity: 1,
+    };
+  });
+  return simplifiedItems;
 }
 
 export default class CheckoutProcess {
@@ -35,144 +40,63 @@ export default class CheckoutProcess {
   init() {
     this.list = getLocalStorage(this.key);
     this.calculateItemSummary();
-    this.calculateOrderTotal();
   }
 
   calculateItemSummary() {
-    this.itemTotal = this.list.reduce((total, item) => {
-      return total + (item.FinalPrice * (item.quantity || 1));
-    }, 0);
-
-    const subtotalElement = document.querySelector(`${this.outputSelector} #subtotal`);
-    if (subtotalElement) {
-      subtotalElement.innerText = this.itemTotal.toFixed(2);
-    }
+    // calculate and display the total amount of the items in the cart, and the number of items.
+    const summaryElement = document.querySelector(
+      this.outputSelector + " #cartTotal"
+    );
+    const itemNumElement = document.querySelector(
+      this.outputSelector + " #num-items"
+    );
+    itemNumElement.innerText = this.list.length;
+    // calculate the total of all the items in the cart
+    const amounts = this.list.map((item) => item.FinalPrice);
+    this.itemTotal = amounts.reduce((sum, item) => sum + item);
+    summaryElement.innerText = `$${this.itemTotal}`;;
   }
 
   calculateOrderTotal() {
-    this.tax = this.itemTotal * 0.06;
-    
-    const itemCount = this.list.reduce((count, item) => count + (item.quantity || 1), 0);
-    this.shipping = 10 + (Math.max(0, itemCount - 1) * 2);
-    
-    this.orderTotal = this.itemTotal + this.tax + this.shipping;
-    
+    // calculate the shipping and tax amounts. Then use them to along with the cart total to figure out the order total
+    this.tax = (this.itemTotal * .06);
+    this.shipping = 10 + (this.list.length - 1) * 2;
+    this.orderTotal = (
+      parseFloat(this.itemTotal) +
+      parseFloat(this.tax) +
+      parseFloat(this.shipping)
+    )
+    // display the totals.
     this.displayOrderTotals();
   }
 
   displayOrderTotals() {
-    const elements = {
-      '#subtotal': this.itemTotal,
-      '#tax': this.tax,
-      '#shipping': this.shipping,
-      '#orderTotal': this.orderTotal
-    };
+    // once the totals are all calculated display them in the order summary page
+    const tax = document.querySelector(`${this.outputSelector} #tax`);
+    const shipping = document.querySelector(`${this.outputSelector} #shipping`);
+    const orderTotal = document.querySelector(`${this.outputSelector} #orderTotal`);
 
-    Object.entries(elements).forEach(([selector, value]) => {
-      const element = document.querySelector(`${this.outputSelector} ${selector}`);
-      if (element) {
-        element.innerText = value.toFixed(2);
-      }
-    });
+    tax.innerText = `$${this.tax.toFixed(2)}`;
+    shipping.innerText = `$${this.shipping.toFixed(2)}`;
+    orderTotal.innerText = `$${this.orderTotal.toFixed(2)}`;
   }
 
-  // INDIVIDUAL TASK: Enhanced checkout with error handling
-  async checkout(form) {
+  async checkout() {
+    const formElement = document.forms["checkout"];
+    const order = formDataToJSON(formElement);
+
+    order.orderDate = new Date().toISOString();
+    order.orderTotal = this.orderTotal;
+    order.tax = this.tax;
+    order.shipping = this.shipping;
+    order.items = packageItems(this.list);
+    //console.log(order);
+
     try {
-      console.log('🔄 Starting checkout process...');
-      
-      // Convert form data to JSON
-      const formData = formDataToJSON(form);
-      
-      // INDIVIDUAL TASK: Form validation
-      if (!this.validateFormData(formData)) {
-        throw new Error('Please fill in all required fields correctly.');
-      }
-
-      // Prepare order object
-      const order = {
-        orderDate: new Date().toISOString(),
-        fname: formData.fname,
-        lname: formData.lname,
-        street: formData.street,
-        city: formData.city,
-        state: formData.state,
-        zip: formData.zip,
-        cardNumber: formData.cardNumber,
-        expiration: formData.expiration,
-        code: formData.code,
-        items: packageItems(this.list),
-        orderTotal: this.orderTotal.toFixed(2),
-        shipping: this.shipping,
-        tax: this.tax.toFixed(2)
-      };
-
-      console.log('📦 Sending order data:', order);
-
-      // Send to server
-      const services = new ExternalServices();
       const response = await services.checkout(order);
-      
-      console.log('✅ Checkout successful:', response);
-      
-      // Clear cart and redirect to success page
-      localStorage.setItem(this.key, JSON.stringify([]));
-      window.location.href = '../checkout/success.html';
-      
-      return response;
-      
-    } catch (error) {
-      console.error('❌ Checkout failed:', error);
-      
-      // INDIVIDUAL TASK: Enhanced error handling
-      this.handleCheckoutError(error);
-      throw error;
-    }
-  }
-
-  // INDIVIDUAL TASK: Form validation method
-  validateFormData(formData) {
-    const requiredFields = ['fname', 'lname', 'street', 'city', 'state', 'zip', 'cardNumber', 'expiration', 'code'];
-    
-    for (let field of requiredFields) {
-      if (!formData[field] || formData[field].trim() === '') {
-        console.error(`❌ Missing required field: ${field}`);
-        return false;
-      }
-    }
-    
-    // Basic validation for test card
-    if (formData.cardNumber !== '1234123412341234') {
-      console.warn('⚠️ Using non-test credit card number');
-    }
-    
-    console.log('✅ Form validation passed');
-    return true;
-  }
-
-  // INDIVIDUAL TASK: Enhanced error handling method
-  handleCheckoutError(error) {
-    let errorMessage = 'Checkout failed. Please try again.';
-    
-    if (error.name === 'servicesError') {
-      errorMessage = error.message.detail || 'Server error occurred. Please check your information.';
-      console.error('🚨 Server Error:', error.message);
-    } else if (error.message.includes('NetworkError') || error.message.includes('Failed to fetch')) {
-      errorMessage = 'Network error. Please check your connection and try again.';
-      console.error('🚨 Network Error:', error.message);
-    } else if (error.message.includes('required fields')) {
-      errorMessage = 'Please fill in all required fields.';
-      console.error('🚨 Validation Error:', error.message);
-    } else {
-      console.error('🚨 Unknown Error:', error);
-    }
-    
-    // Use alertMessage utility
-    if (typeof alertMessage === 'function') {
-      alertMessage(errorMessage, true);
-    } else {
-      // Fallback to basic alert
-      alert(errorMessage);
+      console.log(response);
+    } catch (err) {
+      console.log(err);
     }
   }
 }

@@ -1,43 +1,17 @@
-import { setLocalStorage, getLocalStorage } from "./utils.mjs";
-import ProductData from "./ProductData.mjs";
-import { getParam } from './utils.mjs';
-import ProductDetails from './ProductDetails.mjs';
-import { loadHeaderFooter } from './utils.mjs';
+// Import utility functions for getting URL parameters and loading header/footer, and classes for external services and product details
+import { getParam, loadHeaderFooter } from "./utils.mjs";
+import ExternalServices from "./ExternalServices.mjs";
+import ProductDetails from "./ProductDetails.mjs";
 
+// Load the header and footer components of the page
 loadHeaderFooter();
 
-const productId = getParam('id');
-const dataSource = new ProductData();
+// Create an instance of ExternalServices to handle API calls for the "tents" category
+const dataSource = new ExternalServices("tents");
+// Retrieve the product ID from the URL query parameters
+const productID = getParam("product");
 
-async function renderProductDetail() {
-  const product = await dataSource.findProductById(productId);
-
-  document.querySelector('.product-detail').innerHTML = `
-    <h1>${product.Name}</h1>
-    <img src="${product.Images.PrimaryLarge}" alt="${product.Name}">
-    <p>${product.Description}</p>
-    <p>Price: $${product.FinalPrice}</p>
-  `;
-}
-
-renderProductDetail();
-
-const product = new ProductDetails(productId, dataSource);
+// Create an instance of ProductDetails with the product ID and data source
+const product = new ProductDetails(productID, dataSource);
+// Initialize the product details functionality (e.g., fetching and rendering product data)
 product.init();
-
-// To create the function that will add products to cart:
-function addProductToCart(product) {
-  // Always get cart items or initialize as empty array
-  const cartItems = getLocalStorage("so-cart") || [];
-  
-  // To add new product to cart which is now an array
-  cartItems.push(product);
-  // To save updated cart back to local storage
-  setLocalStorage("so-cart", cartItems);
-}
-document
-  .getElementById("addToCart")
-  .addEventListener("click", addToCartHandler);
-
-  
-  

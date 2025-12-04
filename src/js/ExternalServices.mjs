@@ -1,177 +1,55 @@
-
+// Retrieve the base URL for the server from environment variables
 const baseURL = import.meta.env.VITE_SERVER_URL;
 
-const mockProducts = {
-  tents: [
-    {
-      Id: "880RR",
-      Name: "Marmot Ajax Tent - 3-Person, 3-Season",
-      NameWithoutBrand: "Ajax Tent - 3-Person, 3-Season",
-      Image: {
-        PrimaryMedium:
-          "/images/tents/marmot-ajax-tent-3-person-3-season-in-pale-pumpkin-terracotta~p~880rr_01~320.jpg",
-        PrimaryLarge:
-          "/images/tents/marmot-ajax-tent-3-person-3-season-in-pale-pumpkin-terracotta~p~880rr_01~320.jpg",
-      },
-      Brand: { Name: "Marmot" },
-      FinalPrice: 199.99,
-      Colors: [{ ColorName: "Pale Pumpkin/Terracotta" }],
-      DescriptionHtmlSimple:
-        "Get out and enjoy nature with Marmot's Ajax tent.",
-    },
-    {
-      Id: "985RF",
-      Name: "The North Face Talus Tent - 4-Person, 3-Season",
-      NameWithoutBrand: "Talus Tent - 4-Person, 3-Season",
-      Image: {
-        PrimaryMedium:
-          "/images/tents/the-north-face-talus-tent-4-person-3-season-in-golden-oak-saffron-yellow~p~985rf_01~320.jpg",
-        PrimaryLarge:
-          "/images/tents/the-north-face-talus-tent-4-person-3-season-in-golden-oak-saffron-yellow~p~985rf_01~320.jpg",
-      },
-      Brand: { Name: "The North Face" },
-      FinalPrice: 199.99,
-      Colors: [{ ColorName: "Golden Oak/Saffron Yellow" }],
-      DescriptionHtmlSimple:
-        "Enjoy a fun night under stars with your favorite people.",
-    },
-  ],
-  backpacks: [
-    {
-      Id: "BP001",
-      Name: "Osprey Atmos AG 65 Backpack",
-      NameWithoutBrand: "Atmos AG 65 Backpack",
-      Image: {
-        PrimaryMedium: "/images/backpacks/osprey-atmos-ag-65.jpg",
-        PrimaryLarge: "/images/backpacks/osprey-atmos-ag-65.jpg",
-      },
-      Brand: { Name: "Osprey" },
-      FinalPrice: 279.99,
-      Colors: [{ ColorName: "Graphite Grey" }],
-      DescriptionHtmlSimple: "Advanced comfort and ventilation for long hikes.",
-    },
-  ],
-  "sleeping-bags": [
-    {
-      Id: "SB001",
-      Name: "REI Co-op Magma 15 Sleeping Bag",
-      NameWithoutBrand: "Magma 15 Sleeping Bag",
-      Image: {
-        PrimaryMedium: "/images/sleeping-bags/rei-magma-15.jpg",
-        PrimaryLarge: "/images/sleeping-bags/rei-magma-15.jpg",
-      },
-      Brand: { Name: "REI Co-op" },
-      FinalPrice: 229.99,
-      Colors: [{ ColorName: "Deep Lichen Green" }],
-      DescriptionHtmlSimple: "Warm, lightweight sleeping bag for backpacking.",
-    },
-  ],
-  hammocks: [
-    {
-      Id: "HK001",
-      Name: "ENO DoubleNest Hammock",
-      NameWithoutBrand: "DoubleNest Hammock",
-      Image: {
-        PrimaryMedium: "/images/hammocks/eno-doublenest.jpg",
-        PrimaryLarge: "/images/hammocks/eno-doublenest.jpg",
-      },
-      Brand: { Name: "ENO" },
-      FinalPrice: 69.99,
-      Colors: [{ ColorName: "Slate Blue" }],
-      DescriptionHtmlSimple:
-        "Comfortable two-person hammock for camping and relaxing.",
-    },
-  ],
-};
-
-
-// INDIVIDUAL TASK: Enhanced error handling
-async function convertToJson(res) {
-  const jsonResponse = await res.json();
+// Utility function to convert fetch response to JSON or throw an error if the response is not OK
+function convertToJson(res) {
   if (res.ok) {
-    return jsonResponse;
+    // Return the response parsed as JSON if the request was successful
+    return res.json();
   } else {
-    // Enhanced error handling for individual task
-    throw { 
-      name: 'servicesError', 
-      message: jsonResponse,
-      status: res.status,
-      statusText: res.statusText
-    };
+    // Throw an error for unsuccessful responses
+    throw { name: "servicesError", message: res.statusText };
   }
 }
-
+// Define a class to handle external API services for product and checkout operations
 export default class ExternalServices {
-  constructor() {}
+  constructor() {
+    // Constructor is empty but could be used to initialize category or path (commented code)
+    // this.category = category;
+    // this.path = `../public/json/${this.category}.json`;
+  }
 
+  // Fetch product data for a specific category from the server
   async getData(category) {
-    try {
-      console.log(`🔄 Attempting to fetch ${category} from API...`);
-      const url = `${baseURL}products/search/${category}`;
-      const response = await fetch(url);
-
-      if (response.ok) {
-        const data = await convertToJson(response);
-        console.log(`✅ Successfully fetched ${category} from API`);
-        return data.Result || [];
-      } else {
-        throw new Error(`API returned ${response.status}`);
-      }
-    } catch (error) {
-      console.log(
-        `❌ API failed for ${category}, using mock data:`,
-        error.message,
-      );
-      return mockProducts[category] || [];
-    }
+    // Make a GET request to the server using the category endpoint
+    const response = await fetch(`${baseURL}products/search/${category}`);
+    // Convert the response to JSON using the utility function
+    const data = await convertToJson(response);
+    // Return the 'Result' property from the response data
+    return data.Result;
   }
 
+  // Fetch a single product by its ID from the server
   async findProductById(id) {
-    try {
-      console.log(`🔄 Attempting to fetch product ${id} from API...`);
-      const url = `${baseURL}product/${id}`;
-      const response = await fetch(url);
-
-      if (response.ok) {
-        const data = await convertToJson(response);
-        console.log(`✅ Successfully fetched product ${id} from API`);
-        return data.Result;
-      } else {
-        throw new Error(`API returned ${response.status}`);
-      }
-    } catch (error) {
-      console.log(
-        `❌ API failed for product ${id}, using mock data:`,
-        error.message,
-      );
-      for (const category in mockProducts) {
-        const product = mockProducts[category].find((p) => p.Id === id);
-        if (product) return product;
-      }
-      return null;
-    }
+    // Make a GET request to the server using the product ID endpoint
+    const response = await fetch(`${baseURL}product/${id}`);
+    // Convert the response to JSON using the utility function
+    const data = await convertToJson(response);
+    // Return the 'Result' property from the response data
+    return data.Result;
   }
 
+  // Send checkout data to the server for processing
   async checkout(payload) {
-    try {
-      console.log('🔄 Sending checkout request...', payload);
-      
-      const options = {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload)
-      };
-      
-      const response = await fetch(`${baseURL}/checkout`, options);
-      const data = await convertToJson(response);
-      
-      console.log('✅ Checkout successful:', data);
-      return data;
-    } catch (error) {
-      console.error('❌ Checkout failed:', error);
-      throw error;
-    }
+    // Define options for the POST request, including headers and JSON-stringified payload
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    };
+    // Make a POST request to the checkout endpoint and convert the response to JSON
+    return await fetch(`${baseURL}checkout/`, options).then(convertToJson);
   }
 }
