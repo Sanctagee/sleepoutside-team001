@@ -75,6 +75,14 @@ function productDetailsTemplate(product) {
     productImage.alt = product.NameWithoutBrand || product.Name || "Product Image";
   }
 
+  // Fallback swatches for colors missing image sources
+  const fallbackSwatches = {
+    "Pale Pumpkin/Terracotta": "../images/swatches/pale-pumpkin.png",
+    "Moss Green": "../images/swatches/moss-green.png"
+    // Add more here
+  };
+
+
   // Calculate discount
   const discountPercentage = product.SuggestedRetailPrice ? 
     Math.round(((product.SuggestedRetailPrice - product.FinalPrice) / product.SuggestedRetailPrice) * 100) : 0;
@@ -94,10 +102,42 @@ function productDetailsTemplate(product) {
   }
   if (priceElement) priceElement.textContent = `$${product.FinalPrice}`;
   if (colorElement && product.Colors && product.Colors[0]) {
-    colorElement.textContent = product.Colors[0].ColorName;
+    colorElement.textContent = `Color: ${product.Colors[0].ColorName}`;
+  } else if (colorElement) {
+    colorElement.textContent = "Color: Not available";
   }
   if (descriptionElement && product.DescriptionHtml) {
     descriptionElement.innerHTML = product.DescriptionHtml;
+  }
+
+  // Color Swatch 
+  const swatchContainer = qs(".product__swatch-container");
+
+  if (swatchContainer) {
+    swatchContainer.innerHTML = "";
+
+    (product.Colors || []).forEach(color => {
+      let swatchSRC = color.ColorChipImageSrc || fallbackSwatches[color.ColorName];
+      if (swatchSRC) {
+        const img = document.createElement("img");
+        img.src = swatchSRC;
+        img.alt = color.ColorName;
+        img.className = "product__color-swatch";
+
+        // OPTIONAL ENHANCEMENT: Click to change main product image
+        img.addEventListener("click", () => {
+          productImage.src = color.ColorPreviewImageSrc || swatchSRC;
+          productImage.alt = color.ColorName || product.Name || "Product Image";
+        });
+
+        swatchContainer.appendChild(img);
+      }
+    });
+
+
+    if (!swatchContainer.hasChildNodes()) {
+      swatchContainer.textContent = "No color swatch available";
+    }
   }
 
   const addToCartBtn = document.getElementById('addToCart');

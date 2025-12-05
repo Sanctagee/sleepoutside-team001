@@ -102,7 +102,9 @@ async function convertToJson(res) {
 }
 
 export default class ExternalServices {
-  constructor() {}
+  constructor() {
+    
+  }
 
   async getData(category) {
     try {

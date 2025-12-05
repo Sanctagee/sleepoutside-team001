@@ -317,6 +317,29 @@ button:hover{
   grid-column: 3;
 }
 
+/* ===========Styles for the swatches========== */
+
+.product__swatch-container {
+  margin-top: 8px;
+}
+
+.product__color-swatch {
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  border: 1px solid var(--light-grey);
+  object-fit: cover;
+}
+
+.product__color-swatch:hover {
+  transform: scale(1.15);
+  transition: var(--transition);
+}
+
+.product__color-swatch.selected {
+  border: 2px solid var(--tertiary-color);
+}
+
 /* ==================Styles for the Categories Section ================== */
 
 .categories {
