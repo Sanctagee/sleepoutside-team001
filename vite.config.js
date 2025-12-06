@@ -16,6 +16,9 @@ export default defineConfig({
         product1: resolve(
        __dirname, "src/product_pages/index.html"
         ),
+        final_project: resolve(
+          __dirname,
+          "src/final-project/index.html")
         
       },
     },
