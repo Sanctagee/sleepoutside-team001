@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tours | Fremer Tours and Travel</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <nav class="navbar">
+      <div class="logo">
+      <img src="images/logo.png" alt="Fremer Tours Logo" width="80"></img>
+            <h1>FREMER TOURS AND TRAVEL</h1>
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="tours.html" >Tours</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="booking.html">Booking</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Tours Section -->
+  <main>
+    <h2>Our Tour Packages</h2>
+    <div id="tour-list" class="tour-grid">
+      <!-- Tour cards will be injected here by JS -->
+    </div>
+    <h2>Explore Tour Locations</h2>
+    <div id="map" style="width:100%; height:400px;"></div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Fremer Tours and Travel | Explore Uganda</p>
+  </footer>
+  
+  <script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initMap">
+  </script>
+  <script type="module" src="js/tours.js"></script>
+</body>
+</html>
