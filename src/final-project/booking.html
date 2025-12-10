@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Booking | Fremer Tours and Travel</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <nav class="navbar">
+      <img src="images/logo.png" alt="Fremer Tours Logo" width="80"></img>
+         <h1>FREMER TOURS AND TRAVEL</h1>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="tours.html">Tours</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="booking.html" class="active">Booking</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Booking Form -->
+  <main>
+    <h2>Book Your Tour</h2>
+    <form id="bookingForm" class="booking-form">
+      <label for="name">Full Name</label>
+      <input type="text" id="name" name="name" required>
+
+      <label for="email">Email Address</label>
+      <input type="email" id="email" name="email" required>
+
+      <label for="phone">Phone Number</label>
+      <input type="tel" id="phone" name="phone" required pattern="[0-9]{10,15}">
+
+      <label for="package">Select Tour Package</label>
+      <select id="package" name="package" required>
+        <option value="">--Choose a package--</option>
+        <option value="safari">Wildlife Safari Adventure</option>
+        <option value="culture">Cultural Heritage Tour</option>
+        <option value="family">Family Adventure Trip</option>
+      </select>
+
+      <label for="participants">Number of Participants</label>
+      <input type="number" id="participants" name="participants" min="1" required>
+
+      <label for="date">Preferred Date</label>
+      <input type="date" id="date" name="date" required>
+
+      <button type="submit" id="bookingSubmit">Reserve Tour</button>
+    </form>
+
+    <!-- Confirmation Message -->
+    <div id="confirmation" class="confirmation-message"></div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Fremer Tours and Travel | Reserve Your Adventure</p>
+  </footer>
+
+  <script type="module" src="js/booking.js"></script>
+</body>
+</html>

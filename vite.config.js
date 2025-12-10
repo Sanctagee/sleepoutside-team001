@@ -18,9 +18,27 @@ export default defineConfig({
         ),
         final_project: resolve(
           __dirname,
-          "src/final-project/index.html")
+          "src/final-project/index.html"),
+        contact: resolve(
+          __dirname,
+          "src/final-project/contact.html"),
+        tours: resolve(
+          __dirname,
+          "src/final-project/tours.html"
+        ),
+        gallery: resolve(
+          __dirname,
+          "src/final-project/gallery.html"
+        ),
+        booking: resolve(
+          __dirname,
+          "src/final-project/booking.html"
+        )
+        
         
       },
+
+      
     },
   },
 });
