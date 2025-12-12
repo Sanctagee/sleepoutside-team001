@@ -66,6 +66,7 @@ export async function loadTemplate(path) {
     }
     return await response.text();
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error("Error loading template:", error);
     return "";
   }
@@ -104,6 +105,7 @@ export async function loadHeaderFooter() {
     // Update cart count in header
     cartCount();
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error("Error loading header/footer:", error);
   }
 }
@@ -139,14 +141,14 @@ export function cartCount() {
 // INDIVIDUAL TASK: Alert message utility
 export function alertMessage(message, scroll = true) {
   // Remove existing alerts
-  const existingAlert = document.querySelector('.custom-alert');
+  const existingAlert = document.querySelector(".custom-alert");
   if (existingAlert) {
     existingAlert.remove();
   }
 
   // Create alert element
-  const alert = document.createElement('div');
-  alert.className = 'custom-alert';
+  const alert = document.createElement("div");
+  alert.className = "custom-alert";
   alert.innerHTML = `
     <div class="alert-content">
       <span class="alert-message">${message}</span>
@@ -170,14 +172,14 @@ export function alertMessage(message, scroll = true) {
     animation: slideInRight 0.3s ease-out;
   `;
 
-  alert.querySelector('.alert-content').style.cssText = `
+  alert.querySelector(".alert-content").style.cssText = `
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 1rem;
   `;
 
-  alert.querySelector('.alert-close').style.cssText = `
+  alert.querySelector(".alert-close").style.cssText = `
     background: none;
     border: none;
     font-size: 1.5rem;
@@ -195,7 +197,7 @@ export function alertMessage(message, scroll = true) {
   document.body.appendChild(alert);
 
   // Close button functionality
-  alert.querySelector('.alert-close').addEventListener('click', () => {
+  alert.querySelector(".alert-close").addEventListener("click", () => {
     alert.remove();
   });
 
@@ -208,9 +210,10 @@ export function alertMessage(message, scroll = true) {
 
   // Scroll to top if requested
   if (scroll) {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  console.log('📢 Alert displayed:', message);
+  // eslint-disable-next-line no-console
+  console.log("📢 Alert displayed:", message);
   return alert;
 }
